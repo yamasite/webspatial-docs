@@ -9,6 +9,8 @@ description: 'Inspect the current device, operating system, and whether the app 
 
 Obtains information about the current device, operating system, and runtime environment, including information about the [Web Runtime](../../../concepts/webspatial-app.md#web-runtime) and [WebSpatial Runtime](../../../concepts/webspatial-app.md#webspatial-runtime).
 
+> **Tip — Use capability queries for feature gating:** Use [`WebSpatialRuntime.supports`](../js-api/WebSpatialRuntime.md) when application behavior depends on whether a specific component, API, event, or option is available. User-Agent parsing describes the runtime environment, but it is not the public capability support contract.
+
 ## Exposed On
 
 This property is available on the `navigator` object.

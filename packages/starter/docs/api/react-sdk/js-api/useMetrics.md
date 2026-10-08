@@ -15,10 +15,11 @@ If the [Spatial Scene container](../../../concepts/spatial-scenes.md) is of type
 
 The conversion ratio also differs across spatial computing platforms, so this API should be used consistently for unit conversion.
 
-> [!CAUTION]
-> **Only works in a WebSpatial environment**
+> [!CAUTION] > **Conversion functions require a ready spatial implementation**
 >
-> `useMetrics` can only be called after the spatial capabilities of the SDK have finished loading in a WebSpatial environment — calling it anywhere else throws an error and crashes the app. Put components that call it inside [`<SpatialBoot>`](../react-components/SpatialBoot.md), and render them only on spatial platforms, for example with [runtime detection](../dom-api/userAgent.md).
+> Calling `useMetrics()` itself is safe in plain browsers and during server-side rendering: before spatial capabilities are ready, it returns stable placeholder `pointToPhysical` and `physicalToPoint` functions. Invoking either placeholder function throws `WebSpatialRuntimeError` with capability `useMetrics`.
+>
+> Use [`WebSpatialRuntime.supports("useMetrics")`](./WebSpatialRuntime.md) to gate conversion-dependent UI. In a WebSpatial runtime, put the component inside [`<SpatialBoot>`](../react-components/SpatialBoot.md) so it mounts after the spatial implementation is ready. A component instance that first receives the placeholder keeps it for that instance's lifetime; remount it after `SpatialBoot` resolves to receive the real implementation.
 
 ## Signature
 

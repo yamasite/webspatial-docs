@@ -15,8 +15,10 @@ description: '在 WebSpatial 布局中完成 2D 像素单位和真实世界米�
 
 不同空间计算平台上的换算关系也不一致，所以应该统一通过这个 API 来转换单位。
 
-:::caution[只能在 WebSpatial 环境中使用]
-`useMetrics` 只能在 WebSpatial 环境中、且 SDK 的空间能力加载完成之后调用——在其他环境中调用会抛出异常导致应用崩溃。请把调用它的组件放在 [`<SpatialBoot>`](../react-components/SpatialBoot.md) 内部，并且只在空间平台上渲染这些组件，例如借助[运行时检测](../dom-api/userAgent.md)。
+:::caution[转换函数需要已就绪的空间实现]
+在普通浏览器和服务端渲染期间，调用 `useMetrics()` 本身是安全的：空间能力就绪前，它会返回稳定的占位 `pointToPhysical` 和 `physicalToPoint` 函数。调用任一占位函数都会抛出 capability 为 `useMetrics` 的 `WebSpatialRuntimeError`。
+
+请使用 [`WebSpatialRuntime.supports("useMetrics")`](./WebSpatialRuntime.md) 控制依赖转换功能的 UI。在 WebSpatial 运行时中，请将组件放在 [`<SpatialBoot>`](../react-components/SpatialBoot.md) 内部，让它在空间实现就绪后挂载。某个组件实例如果首次取得的是占位实现，该实例在其生命周期内会一直保留占位实现；请在 `SpatialBoot` resolve 后重新挂载组件以取得真实实现。
 :::
 
 ## 调用形式 {#signature}

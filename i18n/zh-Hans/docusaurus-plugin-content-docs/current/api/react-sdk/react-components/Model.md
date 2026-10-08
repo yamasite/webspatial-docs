@@ -51,7 +51,7 @@ WebSpatial SDK 当前版本中，`<Model>` 支持以下 model element 的 API：
 
 ### `src` {#src}
 
-要嵌入的 3D 模型的 URL。
+要嵌入的 3D 模型 URL。可以使用网络 URL、本地 URL，也可以使用 [`blob:` 对象 URL](#blob-url-sources)。
 
 ```jsx
 import { Model } from "@webspatial/react-sdk";
@@ -127,7 +127,78 @@ function LongScrollPage() {
 
 `type`
 
-模型的 [MIME media type](https://www.iana.org/assignments/media-types/media-types.xhtml#model)。当前支持的类型包括 `model/vnd.usdz+zip` (USDZ) 和 `model/gltf-binary` (GLB)。
+模型的 [MIME media type](https://www.iana.org/assignments/media-types/media-types.xhtml#model)。当前支持的类型包括 `model/vnd.usdz+zip`（USDZ）和 `model/gltf-binary`（GLB）。使用 `blob:` 对象 URL 时，建议明确设置 `type`，让运行时可靠识别模型格式。如果省略 `type`，运行时会读取底层 `Blob.type`。
+
+## 使用 `blob:` URL {#blob-url-sources}
+
+如果模型数据来自内存中的 `Blob`，例如 fetch、文件选择或动态生成的资源，可以创建 `blob:` 对象 URL。这个 URL 既可以传给顶层 `src`，也可以放在子元素 `<source>` 中。
+
+:::note[运行时支持范围]
+WebSpatial SDK 兼容性表记录的支持范围是：PICO OS 6 alpha 2.0 支持在顶层 `src` 中使用 `blob:` URL；PICO OS 6 alpha 2.1 支持在子元素 `<source>` 中使用。如果 `<Model>` 回退为浏览器标准 `<model>` 元素，是否支持 blob URL 由浏览器实现决定。
+:::
+
+下面的示例会获取 GLB 文件、创建对象 URL，并在组件不再使用该 URL 时释放它：
+
+```jsx
+import { Model } from "@webspatial/react-sdk";
+import { useEffect, useState } from "react";
+
+function BlobModel() {
+  const [objectURL, setObjectURL] = useState();
+
+  useEffect(() => {
+    const controller = new AbortController();
+    let createdURL;
+
+    async function load() {
+      const response = await fetch("/modelasset/vehicle.glb", {
+        signal: controller.signal,
+      });
+      if (!response.ok) {
+        throw new Error(`Model request failed: ${response.status}`);
+      }
+
+      const bytes = await response.arrayBuffer();
+      if (controller.signal.aborted) return;
+
+      const blob = new Blob([bytes], { type: "model/gltf-binary" });
+      createdURL = URL.createObjectURL(blob);
+      setObjectURL(createdURL);
+    }
+
+    load().catch((error) => {
+      if (error.name !== "AbortError") console.error(error);
+    });
+
+    return () => {
+      controller.abort();
+      if (createdURL) URL.revokeObjectURL(createdURL);
+    };
+  }, []);
+
+  if (!objectURL) return null;
+
+  return (
+    <Model enable-xr>
+      <source src={objectURL} type="model/gltf-binary" />
+    </Model>
+  );
+}
+```
+
+如果只需要一个 source，也可以把同一个对象 URL 直接传给顶层 `src`：
+
+```jsx
+<Model src={objectURL} enable-xr />
+```
+
+使用对象 URL 时，请注意以下生命周期规则：
+
+- 只要 `<Model>` 仍可能加载或重新加载这个 source，就要保持对象 URL 有效。不要刚赋值就调用 `URL.revokeObjectURL()`。
+- WebSpatial SDK 不会替应用释放对象 URL。应用必须释放自己创建的每个 URL，通常放在创建该 URL 的 effect 清理函数中。
+- 保留正确的模型 MIME 类型。子元素优先明确设置 `type`；使用顶层 `src` 时，请用正确的 `Blob.type` 创建 `Blob`。
+- 顶层 `src` 的优先级高于子元素 `<source>`。如果 blob URL 已被释放、无法访问或模型数据无效，当前 source 会失败；如果还有后续 `<source>`，运行时会继续尝试。
+- 加载成功时，`onLoad` 会触发、`ready` 会 resolve，`currentSrc` 保留原始 `blob:` URL。如果所有 source 都失败，`onError` 会触发，`ready` 会 reject。
 
 ## 生命周期事件 {#lifecycle-events}
 

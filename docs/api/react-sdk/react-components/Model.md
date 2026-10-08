@@ -51,7 +51,7 @@ In the current version of WebSpatial SDK, `<Model>` supports the following model
 
 ### `src`
 
-The URL of the 3D model to embed.
+The URL of the 3D model to embed. This can be a network URL, a local URL, or a [`blob:` object URL](#blob-url-sources).
 
 ```jsx
 import { Model } from "@webspatial/react-sdk";
@@ -127,7 +127,78 @@ The URL of the 3D model resource.
 
 `type`
 
-The [MIME media type](https://www.iana.org/assignments/media-types/media-types.xhtml#model) of the model. Currently supported types are `model/vnd.usdz+zip` (USDZ) and `model/gltf-binary` (GLB).
+The [MIME media type](https://www.iana.org/assignments/media-types/media-types.xhtml#model) of the model. Currently supported types are `model/vnd.usdz+zip` (USDZ) and `model/gltf-binary` (GLB). For a `blob:` object URL, specify `type` when possible so that the runtime can identify the model format reliably. If `type` is omitted, the runtime uses the underlying `Blob.type`.
+
+## `blob:` URL Sources {#blob-url-sources}
+
+Use a `blob:` object URL when the model bytes come from an in-memory `Blob`, for example after a fetch, file selection, or generated asset. A blob URL works in the top-level `src` prop or in a child `<source>` element.
+
+:::note[Runtime availability]
+The WebSpatial SDK compatibility table documents `blob:` URL support on PICO OS 6 alpha 2.0 for the top-level `src` prop, and PICO OS 6 alpha 2.1 for child `<source>` elements. When `<Model>` falls back to the browser's standard `<model>` element, blob URL behavior depends on that browser implementation.
+:::
+
+This example fetches a GLB file, creates an object URL, and releases it when the component stops using it:
+
+```jsx
+import { Model } from "@webspatial/react-sdk";
+import { useEffect, useState } from "react";
+
+function BlobModel() {
+  const [objectURL, setObjectURL] = useState();
+
+  useEffect(() => {
+    const controller = new AbortController();
+    let createdURL;
+
+    async function load() {
+      const response = await fetch("/modelasset/vehicle.glb", {
+        signal: controller.signal,
+      });
+      if (!response.ok) {
+        throw new Error(`Model request failed: ${response.status}`);
+      }
+
+      const bytes = await response.arrayBuffer();
+      if (controller.signal.aborted) return;
+
+      const blob = new Blob([bytes], { type: "model/gltf-binary" });
+      createdURL = URL.createObjectURL(blob);
+      setObjectURL(createdURL);
+    }
+
+    load().catch((error) => {
+      if (error.name !== "AbortError") console.error(error);
+    });
+
+    return () => {
+      controller.abort();
+      if (createdURL) URL.revokeObjectURL(createdURL);
+    };
+  }, []);
+
+  if (!objectURL) return null;
+
+  return (
+    <Model enable-xr>
+      <source src={objectURL} type="model/gltf-binary" />
+    </Model>
+  );
+}
+```
+
+If you need only one source, you can pass the same object URL directly:
+
+```jsx
+<Model src={objectURL} enable-xr />
+```
+
+Follow these lifecycle rules:
+
+- Keep the object URL valid while `<Model>` may still load or reload that source. Do not call `URL.revokeObjectURL()` immediately after assigning it.
+- WebSpatial SDK does not revoke an object URL for you. Revoke each URL that your application creates, usually in the cleanup function of the effect that created it.
+- Preserve the model MIME type. Prefer an explicit child `type`; for top-level `src`, create the `Blob` with the correct `Blob.type`.
+- The top-level `src` is attempted before child `<source>` elements. A revoked, inaccessible, or invalid blob URL fails that source; the runtime then tries the next child source, if present.
+- On success, `onLoad` fires, `ready` resolves, and `currentSrc` is the original `blob:` URL. If every source fails, `onError` fires and `ready` rejects.
 
 ## Lifecycle Events
 

@@ -10,11 +10,11 @@ It automatically packages the app, launches the simulator, pushes the app bundle
 
 ## Quick Reference
 
-| Item | Value |
-| --- | --- |
-| Best for | Previewing a Packaged WebSpatial App in a simulator. |
-| Requires device credentials | No. |
-| Common target platform | Platforms without built-in WebSpatial Runtime, such as visionOS. |
+| Item                        | Value                                                            |
+| --------------------------- | ---------------------------------------------------------------- |
+| Best for                    | Previewing a Packaged WebSpatial App in a simulator.             |
+| Requires device credentials | No.                                                              |
+| Common target platform      | Platforms without built-in WebSpatial Runtime, such as visionOS. |
 
 ## When to Use {#when-to-use}
 
@@ -33,17 +33,23 @@ webspatial-builder run \
   [--base=<base url>] \
   [--manifest=<local path>] \
   [--manifest-url=<url>] \
-  [--project=<dist>]
+  [--project=<dist>] \
+  [--platform=<platform>] \
+  [--bundle-id=<id>] \
+  [--tryWithoutBuild=<true|false>]
 ```
 
 ## Option Overview
 
-| Option | Required | What it controls |
-| --- | --- | --- |
-| `--base` | Optional | Provides or overrides the base URL used to resolve `start_url`. |
-| `--manifest` | Optional | Points Builder at a local Web App Manifest file. |
-| `--manifest-url` | Optional | Fetches the manifest directly from a live site URL. |
-| `--project` | Optional | Points Builder at a custom website build output directory. |
+| Option              | Required | What it controls                                                                             |
+| ------------------- | -------- | -------------------------------------------------------------------------------------------- |
+| `--base`            | Optional | Provides or overrides the base URL used to resolve `start_url`.                              |
+| `--manifest`        | Optional | Points Builder at a local Web App Manifest file.                                             |
+| `--manifest-url`    | Optional | Fetches the manifest directly from a live site URL.                                          |
+| `--project`         | Optional | Points Builder at a custom website build output directory.                                   |
+| `--platform`        | Optional | Selects the packaging platform; currently only `visionos` is implemented and is the default. |
+| `--bundle-id`       | Optional | Overrides the manifest app ID; development mode falls back to `com.webspatial.test`.         |
+| `--tryWithoutBuild` | Optional | Only the string `true` enables reuse of a matching prior command and installed test app.     |
 
 ## Options {#options}
 
@@ -55,10 +61,10 @@ If WebSpatial Builder does not know the current Web App's `start_url`, the value
 
 If the current Web App's `start_url` obtained by WebSpatial Builder is a [relative URL with no domain part](#--manifest), `--base` can provide the domain and complete the URL.
 
-| Resolution state | Runtime behavior |
-| --- | --- |
-| A complete `start_url` is available | The Packaged App loads HTML/CSS/JS and other Web files from the network at runtime. |
-| A complete `start_url` is missing | WebSpatial Builder packages the [website build output](../../concepts/webspatial-app.md#web-build-tool) into the native app bundle, and the app loads website files offline from local files inside the bundle at runtime. |
+| Resolution state                    | Runtime behavior                                                                                                                                                                                                           |
+| ----------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| A complete `start_url` is available | The Packaged App loads HTML/CSS/JS and other Web files from the network at runtime.                                                                                                                                        |
+| A complete `start_url` is missing   | WebSpatial Builder packages the [website build output](../../concepts/webspatial-app.md#web-build-tool) into the native app bundle, and the app loads website files offline from local files inside the bundle at runtime. |
 
 :::tip[Prefer `--base` during development]
 During development and debugging, offline packaging means every code change requires rerunning Builder and waiting for packaging and installation to finish. It is recommended to provide `--base` whenever possible.
@@ -81,6 +87,7 @@ When running the `run` command, if the manifest cannot be found, WebSpatial Buil
   scope: "/",
 }
 ```
+
 :::
 
 Fields such as `start_url` in a Web App Manifest are usually relative URLs and do not hardcode the domain or other base URL parts. That means WebSpatial Builder cannot determine how to access the current Web App by URL from the manifest file in the project repository alone. It needs [`--base` to obtain the domain and complete the URL](#--base). Otherwise, the generated Packaged App will contain all [website build output](../../concepts/webspatial-app.md#web-build-tool) and will not load the site from the network.

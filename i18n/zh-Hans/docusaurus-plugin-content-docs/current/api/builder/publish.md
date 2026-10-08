@@ -1,5 +1,5 @@
 ---
-sidebar_position: 3
+sidebar_position: 4
 description: '把已构建的 Packaged WebSpatial App 上传到 App Store Connect，用于 TestFlight 或正式提交。'
 ---
 
@@ -11,11 +11,11 @@ description: '把已构建的 Packaged WebSpatial App 上传到 App Store Connec
 
 ## Quick Reference
 
-| 项目 | 内容 |
-| --- | --- |
-| 最适合 | 把 Packaged WebSpatial App 发布到应用商店。 |
-| 必填凭证 | 在 visionOS 上需要 `--u`、`--p`、`--version`、`--bundle-id`、`--teamId`。 |
-| 是否上传到应用商店 | 会，在打包后自动上传。 |
+| 项目               | 内容                                              |
+| ------------------ | ------------------------------------------------- |
+| 最适合             | 把 Packaged WebSpatial App 发布到应用商店。       |
+| CLI 必填选项       | `--base`、`--teamId`、`--version`、`--u`、`--p`。 |
+| 是否上传到应用商店 | 会，在打包后自动上传。                            |
 
 ## 适用场景 {#when-to-use}
 
@@ -34,10 +34,12 @@ webspatial-builder publish \
   --u=<username> \
   --p=<password> \
   --version=<app version> \
-  --bundle-id=<id> \
+  --base=<base url or path> \
   --teamId=<id> \
+  [--bundle-id=<id>] \
+  [--platform=visionos] \
+  [--buildType=<type>] \
   [--export=<local path>] \
-  [--base=<base url>] \
   [--manifest=<local path>] \
   [--manifest-url=<url>] \
   [--project=<dist>]
@@ -45,18 +47,20 @@ webspatial-builder publish \
 
 ## 选项总览
 
-| 选项 | 是否必填 | 作用 |
-| --- | --- | --- |
-| `--u` | visionOS 必填 | 提供用于上传的 Apple 开发者账号邮箱。 |
-| `--p` | visionOS 必填 | 提供 Apple 开发者账号的 app-specific password。 |
-| `--version` | visionOS 必填 | 设置上传到 App Store Connect 的应用版本号。 |
-| `--teamId` | visionOS 必填 | 指定用于签名构建结果的 Apple 开发团队。 |
-| `--bundle-id` | visionOS 必填 | 指定已注册的 Apple 应用标识符。 |
-| `--export` | 可选 | 修改原生应用包的导出路径。 |
-| `--base` | 可选 | 提供或覆盖用于解析 `start_url` 的 base URL。 |
-| `--manifest` | 可选 | 指定本地 Web App Manifest 文件路径。 |
-| `--manifest-url` | 可选 | 直接从线上 URL 获取 Manifest。 |
-| `--project` | 可选 | 指定自定义的网站构建产物目录。 |
+| 选项             | 是否必填       | 作用                                                                  |
+| ---------------- | -------------- | --------------------------------------------------------------------- |
+| `--u`            | 必填           | 提供用于上传的 Apple 开发者账号邮箱。                                 |
+| `--p`            | 必填           | 提供 Apple 开发者账号的 app-specific password。                       |
+| `--version`      | 必填           | 设置上传到 App Store Connect 的应用版本号。                           |
+| `--teamId`       | 必填           | 指定用于签名构建结果的 Apple 开发团队。                               |
+| `--bundle-id`    | Commander 可选 | 指定已注册的 Apple 应用标识符。                                       |
+| `--platform`     | 可选           | 选择平台；当前只实现 `visionos`，也是默认值。                         |
+| `--buildType`    | 可选           | CLI 接受该参数，但 `publish` 会在构建前强制改为 `app-store-connect`。 |
+| `--export`       | 可选           | 修改原生应用包的导出路径。                                            |
+| `--base`         | 必填           | 提供或覆盖用于解析 `start_url` 的 base URL 或路径。                   |
+| `--manifest`     | 可选           | 指定本地 Web App Manifest 文件路径。                                  |
+| `--manifest-url` | 可选           | 直接从线上 URL 获取 Manifest。                                        |
+| `--project`      | 可选           | 指定自定义的网站构建产物目录。                                        |
 
 ## 选项 {#options}
 
@@ -74,7 +78,7 @@ webspatial-builder publish \
 
 ### `--bundle-id`
 
-提交到 visionOS App Store 时必填，值来自[在 Apple 开发者账号控制台注册 App 后得到的 Bundle ID](../../how-to/app-store-connect.md#prerequisites)。
+Commander 不强制必填。用于覆盖 Manifest 中的 App ID，值可来自[在 Apple 开发者账号控制台注册 App 后得到的 Bundle ID](../../how-to/app-store-connect.md#prerequisites)。
 
 ### `--version`
 
@@ -86,15 +90,15 @@ WebSpatial Builder 生成的原生应用包默认会写入 `build/` 目录，可
 
 ### `--base`
 
-为当前 [Web App](../../concepts/webspatial-app.md#web-app) 的起始网址（[`start_url`](https://developer.mozilla.org/en-US/docs/Web/Manifest/start_url)）指定 base URL。默认值是 `""`。
+为当前 [Web App](../../concepts/webspatial-app.md#web-app) 的起始网址（[`start_url`](https://developer.mozilla.org/en-US/docs/Web/Manifest/start_url)）指定 base URL 或路径。该选项由 Commander 强制要求。
 
 如果 WebSpatial Builder 不知道当前 Web App 的 `start_url`，`--base` 的值会被直接作为 `start_url`。
 
 如果 WebSpatial Builder 获取到的 `start_url` 是[相对地址，缺少域名部分](#--manifest)，可以通过 `--base` 提供域名，补全 URL。
 
-| 解析状态 | 运行时行为 |
-| --- | --- |
-| 已有完整的 `start_url` | Packaged App 在运行过程中会从线上加载 HTML/CSS/JS 等 Web 文件。 |
+| 解析状态               | 运行时行为                                                                                                                                             |
+| ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| 已有完整的 `start_url` | Packaged App 在运行过程中会从线上加载 HTML/CSS/JS 等 Web 文件。                                                                                        |
 | 缺少完整的 `start_url` | WebSpatial Builder 会把[网站构建产物](../../concepts/webspatial-app.md#web-build-tool)打包进原生应用包里，运行时从应用包内的本地文件离线加载网站内容。 |
 
 如果 WebSpatial Builder 已经拿到当前 Web App 的完整 `start_url`，可以用 `--base` 修改 `start_url` 的 base 部分。

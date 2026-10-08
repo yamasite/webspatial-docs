@@ -1,5 +1,5 @@
 <!--
-sidebar_position: 2
+sidebar_position: 3
 description: 'Build a Packaged WebSpatial App that can be installed on test devices or prepared for release workflows.'
 -->
 
@@ -11,11 +11,11 @@ visionOS test devices must be [registered in advance in the Apple developer acco
 
 ## Quick Reference
 
-| Item | Value |
-| --- | --- |
-| Best for | Previewing a Packaged WebSpatial App on a personal test device. |
-| Required credentials | `--bundle-id` and `--teamId` for visionOS. |
-| Does it upload to a store? | No. |
+| Item                       | Value                                                           |
+| -------------------------- | --------------------------------------------------------------- |
+| Best for                   | Previewing a Packaged WebSpatial App on a personal test device. |
+| Required command options   | `--base` and `--teamId`.                                        |
+| Does it upload to a store? | No.                                                             |
 
 ## When to Use
 
@@ -33,10 +33,13 @@ visionOS test devices must be [registered in advance in the Apple developer acco
 
 ```bash
 webspatial-builder build \
-  --bundle-id=<id> \
+  --base=<base url or path> \
   --teamId=<id> \
+  [--bundle-id=<id>] \
+  [--platform=visionos] \
+  [--version=<version>] \
+  [--buildType=<type>] \
   [--export=<local path>] \
-  [--base=<base url>] \
   [--manifest=<local path>] \
   [--manifest-url=<url>] \
   [--project=<dist>]
@@ -44,15 +47,18 @@ webspatial-builder build \
 
 ## Option Overview
 
-| Option | Required | What it controls |
-| --- | --- | --- |
-| `--teamId` | Yes for visionOS | Identifies the Apple developer team used to sign the build. |
-| `--bundle-id` | Yes for visionOS | Selects the registered Apple app identifier. |
-| `--export` | Optional | Changes the output path of the generated native app bundle. |
-| `--base` | Optional | Provides or overrides the base URL used to resolve `start_url`. |
-| `--manifest` | Optional | Points Builder at a local Web App Manifest file. |
-| `--manifest-url` | Optional | Fetches the manifest directly from a live site URL. |
-| `--project` | Optional | Points Builder at a custom website build output directory. |
+| Option           | Required              | What it controls                                                                                                                       |
+| ---------------- | --------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
+| `--base`         | Yes                   | Provides or overrides the base URL or path used to resolve `start_url`.                                                                |
+| `--teamId`       | Yes                   | Identifies the Apple developer team used to sign the build.                                                                            |
+| `--bundle-id`    | Optional in Commander | Selects the registered Apple app identifier.                                                                                           |
+| `--platform`     | Optional              | Selects the platform; currently only `visionos` is implemented and is the default.                                                     |
+| `--version`      | Optional              | Sets the app version; defaults to `1.0` in the generated Xcode project.                                                                |
+| `--buildType`    | Optional              | One of `release-testing`, `app-store-connect`, `debugging`, or `enterprise`; invalid or missing values fall back to `release-testing`. |
+| `--export`       | Optional              | Changes the output path of the generated native app bundle.                                                                            |
+| `--manifest`     | Optional              | Points Builder at a local Web App Manifest file.                                                                                       |
+| `--manifest-url` | Optional              | Fetches the manifest directly from a live site URL.                                                                                    |
+| `--project`      | Optional              | Points Builder at a custom website build output directory.                                                                             |
 
 ## Options
 
@@ -62,7 +68,7 @@ Required to preview on a visionOS device. Comes from the Team ID in the develope
 
 ### `--bundle-id`
 
-Required to preview on a visionOS device. Comes from the Bundle ID obtained by registering the app in the [Apple developer account console](../../how-to/app-store-connect.md#prerequisites).
+Optional at CLI parsing. Overrides the manifest app ID and can use the Bundle ID obtained by registering the app in the [Apple developer account console](../../how-to/app-store-connect.md#prerequisites).
 
 ### `--export`
 
@@ -70,16 +76,16 @@ By default, the native app bundle generated by WebSpatial Builder is written to 
 
 ### `--base`
 
-Specifies the base URL for the start URL ([`start_url`](https://developer.mozilla.org/en-US/docs/Web/Manifest/start_url)) of the current [Web App](../../concepts/webspatial-app.md#web-app). The default value is `""`.
+Specifies the base URL or path for the current Web App start URL ([`start_url`](https://developer.mozilla.org/en-US/docs/Web/Manifest/start_url)). Commander requires this option.
 
 If WebSpatial Builder does not know the current Web App's `start_url`, the value of `--base` is used directly as `start_url`.
 
 If the current Web App's `start_url` obtained by WebSpatial Builder is a [relative URL with no domain part](#--manifest), `--base` can provide the domain and complete the URL.
 
-| Resolution state | Runtime behavior |
-| --- | --- |
-| A complete `start_url` is available | The Packaged App loads HTML/CSS/JS and other Web files from the network at runtime. |
-| A complete `start_url` is missing | WebSpatial Builder packages the [website build output](../../concepts/webspatial-app.md#web-build-tool) into the native app bundle, and the app loads website files offline from local files inside the bundle at runtime. |
+| Resolution state                    | Runtime behavior                                                                                                                                                                                                           |
+| ----------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| A complete `start_url` is available | The Packaged App loads HTML/CSS/JS and other Web files from the network at runtime.                                                                                                                                        |
+| A complete `start_url` is missing   | WebSpatial Builder packages the [website build output](../../concepts/webspatial-app.md#web-build-tool) into the native app bundle, and the app loads website files offline from local files inside the bundle at runtime. |
 
 If WebSpatial Builder already has the complete `start_url` for the current Web App, `--base` can be used to change the base part of `start_url`.
 

@@ -10,11 +10,11 @@ description: '在模拟器中启动 Packaged WebSpatial App，用于本地预览
 
 ## Quick Reference
 
-| 项目 | 内容 |
-| --- | --- |
-| 最适合 | 在模拟器里预览 Packaged WebSpatial App。 |
-| 是否需要真机凭证 | 不需要。 |
-| 常见目标平台 | 没有内置 WebSpatial Runtime 的平台，比如 visionOS。 |
+| 项目             | 内容                                                |
+| ---------------- | --------------------------------------------------- |
+| 最适合           | 在模拟器里预览 Packaged WebSpatial App。            |
+| 是否需要真机凭证 | 不需要。                                            |
+| 常见目标平台     | 没有内置 WebSpatial Runtime 的平台，比如 visionOS。 |
 
 ## 适用场景 {#when-to-use}
 
@@ -33,17 +33,23 @@ webspatial-builder run \
   [--base=<base url>] \
   [--manifest=<local path>] \
   [--manifest-url=<url>] \
-  [--project=<dist>]
+  [--project=<dist>] \
+  [--platform=<platform>] \
+  [--bundle-id=<id>] \
+  [--tryWithoutBuild=<true|false>]
 ```
 
 ## 选项总览
 
-| 选项 | 是否必填 | 作用 |
-| --- | --- | --- |
-| `--base` | 可选 | 提供或覆盖用于解析 `start_url` 的 base URL。 |
-| `--manifest` | 可选 | 指定本地 Web App Manifest 文件路径。 |
-| `--manifest-url` | 可选 | 直接从线上 URL 获取 Manifest。 |
-| `--project` | 可选 | 指定自定义的网站构建产物目录。 |
+| 选项                | 是否必填 | 作用                                                             |
+| ------------------- | -------- | ---------------------------------------------------------------- |
+| `--base`            | 可选     | 提供或覆盖用于解析 `start_url` 的 base URL。                     |
+| `--manifest`        | 可选     | 指定本地 Web App Manifest 文件路径。                             |
+| `--manifest-url`    | 可选     | 直接从线上 URL 获取 Manifest。                                   |
+| `--project`         | 可选     | 指定自定义的网站构建产物目录。                                   |
+| `--platform`        | 可选     | 选择打包平台；当前只实现 `visionos`，也是默认值。                |
+| `--bundle-id`       | 可选     | 覆盖 Manifest App ID；开发模式默认回退到 `com.webspatial.test`。 |
+| `--tryWithoutBuild` | 可选     | 只有字符串 `true` 会尝试复用相同的上一次命令和已安装测试 App。   |
 
 ## 选项 {#options}
 
@@ -55,9 +61,9 @@ webspatial-builder run \
 
 如果 WebSpatial Builder 获取到的 `start_url` 是[相对地址，缺少域名部分](#--manifest)，可以通过 `--base` 提供域名，补全 URL。
 
-| 解析状态 | 运行时行为 |
-| --- | --- |
-| 已有完整的 `start_url` | Packaged App 在运行过程中会从线上加载 HTML/CSS/JS 等 Web 文件。 |
+| 解析状态               | 运行时行为                                                                                                                                             |
+| ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| 已有完整的 `start_url` | Packaged App 在运行过程中会从线上加载 HTML/CSS/JS 等 Web 文件。                                                                                        |
 | 缺少完整的 `start_url` | WebSpatial Builder 会把[网站构建产物](../../concepts/webspatial-app.md#web-build-tool)打包进原生应用包里，运行时从应用包内的本地文件离线加载网站内容。 |
 
 :::tip[开发阶段优先提供 `--base`]
@@ -81,6 +87,7 @@ webspatial-builder run \
   scope: "/",
 }
 ```
+
 :::
 
 Web App Manifest 里的 `start_url` 等字段通常都是相对地址，不会写死域名等 base URL 信息，所以 WebSpatial Builder 仅凭仓库里的 manifest 文件无法确定如何通过 URL 访问当前 Web App，需要依靠 [`--base`](#--base) 获取域名并补全 URL。否则生成的 Packaged App 会包含所有[网站构建产物](../../concepts/webspatial-app.md#web-build-tool)，而不是从线上加载网站。

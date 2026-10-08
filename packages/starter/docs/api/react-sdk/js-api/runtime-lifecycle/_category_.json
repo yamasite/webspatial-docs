@@ -1,0 +1,9 @@
+{
+  "label": "Runtime lifecycle",
+  "position": 1,
+  "collapsed": true,
+  "link": {
+    "type": "generated-index",
+    "description": "Load the spatial runtime, observe readiness, handle load failures, and choose one React SDK entry root."
+  }
+}

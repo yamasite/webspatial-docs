@@ -44,7 +44,7 @@ type SpatialBootProps = {
 
 - `children`：空间能力就绪后要展示的内容。
 - `onReady`：加载成功时调用。在开发环境下它可能被调用不止一次（例如在 React `StrictMode` 下），所以回调要保持幂等。
-- `onError`：加载失败时调用，参数是一个描述失败原因的 `WebSpatialBootError`——它是普通的 `Error`，原始错误保存在 `cause` 里。
+- `onError`：加载失败时调用，参数是一个描述失败原因的 [`WebSpatialBootError`](../js-api/runtime-lifecycle/WebSpatialBootError.md)——它是普通的 `Error`，原始错误保存在 `cause` 里。
 
 ## 行为 {#behavior}
 

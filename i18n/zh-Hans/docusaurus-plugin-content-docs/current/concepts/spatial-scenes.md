@@ -24,7 +24,7 @@ Spatial Scene 目前有三种类型：
 
 [空间化 HTML 元素](./spatialized-html-elements.md)可以从这个 2D 面片上被「抬升」到前方（朝向用户）的 3D 空间中做 Z 轴方向上的[布局](../api/react-sdk/css-api/back.md)和[变形转换](../api/react-sdk/css-api/transform.md)。
 如果在网页中添加 [3D 内容容器元素](./3d-content-containers.md)，也会在这个 2D 面片前方的空间中渲染有体积的 3D 内容。
-因此「window」类型的 Spatial Scene 不只是一个平面，不是只能包含 纯 2D 内容，也可以包含空间化 UI 和有体积的 3D 内容。
+因此「window」类型的 Spatial Scene 不只是一个平面，不是只能包含纯 2D 内容，也可以包含空间化 UI 和有体积的 3D 内容。
 
 Spatial Scene 也可以设置为 `volume` 类型，这种类型不再优先服务于 GUI 需求，而是用于模拟现实世界中的真实物体。
 

@@ -9,12 +9,12 @@ One of the [initialization properties](../../../concepts/spatial-scenes.md#scene
 
 ## Availability {#declared-in}
 
-| Item | Value |
-| --- | --- |
-| Applies to | `window` scenes support `width` and `height`; `volume` scenes also support `depth`. |
-| New scenes | Set through [`initScene`](../js-api/initScene.md). |
-| Start scene | Set through the [Web App Manifest](../manifest-options/main-scene.md). |
-| Default value | None. |
+| Item          | Value                                                                                                 |
+| ------------- | ----------------------------------------------------------------------------------------------------- |
+| Applies to    | `window` scenes support `width` and `height`; `volume` scenes also support `depth`.                   |
+| New scenes    | Set through [`initScene`](../js-api/initScene.md).                                                    |
+| Start scene   | Set through the [Web App Manifest](../manifest-options/main-scene.md).                                |
+| Default value | No author-supplied value required; a built-in fallback applies (see [Default Value](#default-value)). |
 
 ## Type Signature {#type}
 
@@ -33,17 +33,20 @@ One of the [initialization properties](../../../concepts/spatial-scenes.md#scene
 ```js title="Set defaultSize for a new scene" {6-11}
 import { initScene } from "@webspatial/react-sdk";
 
-initScene("newSceneName", defaultConfig => {
-  return {
-    ...defaultConfig,
-    type: "volume",
-    defaultSize: {
-      width: 500,
-      height: "1000px",
-      depth: "1m",
-    },
-  };
-});
+initScene(
+  "newSceneName",
+  defaultConfig => {
+    return {
+      ...defaultConfig,
+      defaultSize: {
+        width: 500,
+        height: "1000px",
+        depth: "1m",
+      },
+    };
+  },
+  { type: "volume" },
+);
 window.open(newSceneUrl, "newSceneName");
 ```
 
@@ -68,12 +71,19 @@ In a Web App Manifest, convert camelCase keys such as `defaultSize` to lowercase
 
 ## Default Value {#default-value}
 
-None.
+You do not have to set `defaultSize`. When a scene is created without one, the WebSpatial runtime applies a built-in fallback size:
+
+| Scene type | Built-in fallback `defaultSize`                                       |
+| ---------- | --------------------------------------------------------------------- |
+| `window`   | `{ width: 1280, height: 720 }` (pixels)                               |
+| `volume`   | `{ width: "0.94m", height: "0.94m", depth: "0.94m" }` (a 0.94 m cube) |
+
+An author-supplied `defaultSize` overrides these fallbacks for that scene.
 
 ## Accepted Values {#accepted-values}
 
-| Field | Accepted value |
-| --- | --- |
-| `width` | A number with `px` as the default unit, or a string with a unit suffix such as `"100px"` or `"2m"`. |
+| Field    | Accepted value                                                                                      |
+| -------- | --------------------------------------------------------------------------------------------------- |
+| `width`  | A number with `px` as the default unit, or a string with a unit suffix such as `"100px"` or `"2m"`. |
 | `height` | A number with `px` as the default unit, or a string with a unit suffix such as `"100px"` or `"2m"`. |
-| `depth` | A number with `px` as the default unit, or a string with a unit suffix such as `"100px"` or `"2m"`. |
+| `depth`  | A number with `px` as the default unit, or a string with a unit suffix such as `"100px"` or `"2m"`. |

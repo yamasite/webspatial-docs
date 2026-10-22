@@ -35,8 +35,7 @@ For spatialized HTML elements, this adds such a translucent material backplate.
 
 ## Syntax
 
-> [!CAUTION]
-> **Temporary prefixed CSS name**
+> [!CAUTION] > **Temporary prefixed CSS name**
 >
 > Before standardization is complete, CSS properties in the WebSpatial API need the `-xr-` prefix.
 > In the current implementation of WebSpatial SDK, for performance reasons, new CSS APIs are implemented through CSS custom properties, so the property name for `background-material` must be written as `--xr-background-material` both in CSS styles and in the `style` attribute.
@@ -63,9 +62,12 @@ div {
 
 `background-material` takes an enum value:
 
-- `translucent`
-- `transparent`
-- `none`
+- `none` — the default. The webpage window keeps its native opaque background; spatialized HTML elements get a transparent background.
+- `translucent` — a glass-like translucent material.
+- `thick` — a thicker translucent material.
+- `regular` — a regular (medium) translucent material.
+- `thin` — a thin translucent material.
+- `transparent` — a fully transparent background with no backplate.
 
 ## Initial Value
 

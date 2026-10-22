@@ -7,7 +7,7 @@ description: 'Use WebSpatial in SSR projects: mount SpatialBoot on the client an
 
 Good news: WebSpatial SDK supports SSR out of the box. [Integrating it](../introduction/getting-started.md#set-up-your-project) works the same way as in any other React project — no extra provider and no special configuration.
 
-There is just one thing to keep in mind about *where* to put [`<SpatialBoot>`](../api/react-sdk/react-components/SpatialBoot.md): mount it in client-rendered code, and keep content that must appear in server-rendered HTML — for example, content search engines should see — outside it.
+There is just one thing to keep in mind about _where_ to put [`<SpatialBoot>`](../api/react-sdk/react-components/SpatialBoot.md): mount it in client-rendered code, and keep content that must appear in server-rendered HTML — for example, content search engines should see — outside it.
 
 :::info[Why this works]
 During server rendering and in ordinary browsers, WebSpatial components render as normal HTML elements, so nothing breaks. `<SpatialBoot>` loads the spatial capabilities only on the client, in a [WebSpatial Runtime](../concepts/webspatial-app.md#webspatial-runtime), and shows nothing until loading finishes — which is why anything placed inside it is not part of the server-rendered HTML.
@@ -17,7 +17,7 @@ During server rendering and in ordinary browsers, WebSpatial components render a
 
 Put `<SpatialBoot>` inside a [client component](https://nextjs.org/docs/app/getting-started/server-and-client-components):
 
-```jsx title="spatial-product-view.jsx" {1,8,12}
+```jsx title="spatial-product-view.jsx" {1,7,11}
 "use client";
 
 import { SpatialBoot, Model } from "@webspatial/react-sdk";

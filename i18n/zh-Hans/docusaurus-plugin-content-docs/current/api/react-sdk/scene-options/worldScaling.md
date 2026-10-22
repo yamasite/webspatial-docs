@@ -10,12 +10,12 @@ description: '控制空间场景是保持视觉大小恒定，还是随距离产
 
 ## 适用范围与设置方式 {#declared-in}
 
-| 项目 | 内容 |
-| --- | --- |
-| 适用于 | 仅适用于 `volume` 类型空间场景。 |
-| 新场景 | 通过 [`initScene`](../js-api/initScene.md) 设置。 |
+| 项目     | 内容                                                              |
+| -------- | ----------------------------------------------------------------- |
+| 适用于   | 仅适用于 `volume` 类型空间场景。                                  |
+| 新场景   | 通过 [`initScene`](../js-api/initScene.md) 设置。                 |
 | 起始场景 | 通过 [Web App Manifest](../manifest-options/main-scene.md) 设置。 |
-| 默认值 | `"automatic"` |
+| 默认值   | `"automatic"`                                                     |
 
 ## 类型定义 {#type}
 
@@ -41,16 +41,16 @@ window.open(newSceneUrl, "newSceneName");
 ### 使用 Web App Manifest
 
 :::caution[Manifest 属性命名]
-在 Web App Manifest 里，建议把 `worldScaling` 这样的驼峰属性名改成 `world_scaling` 这样的全小写下划线写法。
+在构建期键 `xr_main_scene` 里，请按下面示例用 camelCase 书写属性名 `worldScaling`。WebSpatial Builder 会忽略 `xr_main_scene` 内的下划线写法 `world_scaling`。运行时键 `xr_spatial_scene` 同时接受两种写法，详见 [main-scene](../manifest-options/main-scene.md#runtime-key-xr_spatial_scene)。
 :::
 
-```json title="通过 Web App Manifest 设置起始场景的 world_scaling" {5-6}
+```json title="通过 Web App Manifest 设置起始场景的 worldScaling" {5-6}
 {
   "name": "example app",
   "start_url": "/",
   "xr_main_scene": {
     "type": "volume",
-    "world_scaling": "dynamic"
+    "worldScaling": "dynamic"
   }
 }
 ```
@@ -61,7 +61,7 @@ window.open(newSceneUrl, "newSceneName");
 
 ## 可接受的值 {#accepted-values}
 
-| 取值 | 含义 |
-| --- | --- |
-| `"automatic"` | 移动时会产生近大远小的缩放效果，更像现实世界中的物体。 |
-| `"dynamic"` | 移动时始终相对于用户视野保持大小不变，和 `window` 类型空间场景的默认行为一致。 |
+| 取值          | 含义                                                                           |
+| ------------- | ------------------------------------------------------------------------------ |
+| `"automatic"` | 移动时会产生近大远小的缩放效果，更像现实世界中的物体。                         |
+| `"dynamic"`   | 移动时始终相对于用户视野保持大小不变，和 `window` 类型空间场景的默认行为一致。 |

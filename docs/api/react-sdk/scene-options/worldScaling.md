@@ -10,12 +10,12 @@ Only Spatial Scenes of type `volume` support `worldScaling`.
 
 ## Availability {#declared-in}
 
-| Item | Value |
-| --- | --- |
-| Applies to | Only `volume` Spatial Scenes. |
-| New scenes | Set through [`initScene`](../js-api/initScene.md). |
-| Start scene | Set through the [Web App Manifest](../manifest-options/main-scene.md). |
-| Default value | `"automatic"` |
+| Item          | Value                                                                  |
+| ------------- | ---------------------------------------------------------------------- |
+| Applies to    | Only `volume` Spatial Scenes.                                          |
+| New scenes    | Set through [`initScene`](../js-api/initScene.md).                     |
+| Start scene   | Set through the [Web App Manifest](../manifest-options/main-scene.md). |
+| Default value | `"automatic"`                                                          |
 
 ## Type Signature {#type}
 
@@ -41,16 +41,16 @@ window.open(newSceneUrl, "newSceneName");
 ### Using the Web App Manifest
 
 :::caution[Manifest key naming]
-In a Web App Manifest, convert camelCase keys such as `worldScaling` to lowercase snake_case such as `world_scaling`.
+In the build-time `xr_main_scene` key, write the option in camelCase — `worldScaling` — exactly as shown below. WebSpatial Builder ignores the snake_case spelling `world_scaling` inside `xr_main_scene`. The separate runtime `xr_spatial_scene` key accepts both spellings; see [main-scene](../manifest-options/main-scene.md#runtime-key-xr_spatial_scene).
 :::
 
-```json title="Set world_scaling for the start scene" {5-6}
+```json title="Set worldScaling for the start scene" {5-6}
 {
   "name": "example app",
   "start_url": "/",
   "xr_main_scene": {
     "type": "volume",
-    "world_scaling": "dynamic"
+    "worldScaling": "dynamic"
   }
 }
 ```
@@ -61,7 +61,7 @@ In a Web App Manifest, convert camelCase keys such as `worldScaling` to lowercas
 
 ## Accepted Values {#accepted-values}
 
-| Value | Meaning |
-| --- | --- |
-| `"automatic"` | Shows a distance-based scaling effect during movement, like a real-world object. |
-| `"dynamic"` | Keeps a constant size relative to the user's field of view during movement, just like the default behavior of a `window` Spatial Scene. |
+| Value         | Meaning                                                                                                                                 |
+| ------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
+| `"automatic"` | Shows a distance-based scaling effect during movement, like a real-world object.                                                        |
+| `"dynamic"`   | Keeps a constant size relative to the user's field of view during movement, just like the default behavior of a `window` Spatial Scene. |

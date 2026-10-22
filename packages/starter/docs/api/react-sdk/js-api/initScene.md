@@ -14,17 +14,20 @@ Applies custom configuration to the [initialization properties](../../../concept
 ```js
 import { initScene } from "@webspatial/react-sdk";
 
-initScene("newSceneName", defaultConfig => {
-  return {
-    ...defaultConfig,
-    type: "volume",
-    defaultSize: {
-      width: "1m",
-      height: "100px",
-      depth: "100px",
-    },
-  };
-});
+initScene(
+  "newSceneName",
+  defaultConfig => {
+    return {
+      ...defaultConfig,
+      defaultSize: {
+        width: "1m",
+        height: "100px",
+        depth: "100px",
+      },
+    };
+  },
+  { type: "volume" },
+);
 window.open(newSceneUrl, "newSceneName");
 ```
 
@@ -43,6 +46,17 @@ If `initScene` is called multiple times for the same `name`, the custom initiali
 A callback function. Its parameter, `defaultConfig`, is the latest state of the custom initialization properties for that `name`, and the callback returns the new custom initialization properties.
 
 If this is the first time `initScene` is called for that `name`, the parameter `defaultConfig` contains the default initialization properties.
+
+### options
+
+An optional third argument:
+
+```ts
+options?: { type: "window" | "volume" };
+```
+
+- `options.type` selects the [Spatial Scene type](../../../concepts/spatial-scenes.md) whose built-in defaults seed `defaultConfig` and whose schema validates the returned configuration. It defaults to `"window"`.
+- Pass `{ type: "volume" }` when the scene being initialized is a volume scene, so volume defaults and validation are applied. The scene type is taken from this `options.type`, not from a `type` field returned by the callback.
 
 ## Return Shape
 

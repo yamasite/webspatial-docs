@@ -63,7 +63,7 @@ Packaged WebSpatial App 是自带 [WebSpatial Runtime](#webspatial-runtime) 和 
 这时就已经可以直接用 [WebSpatial Builder](#webspatial-builder) 做打包，builder 会自动[把网站产物复制到应用包里](../introduction/getting-started.md#packaged-app-mode)，应用运行过程中会从本地的包文件中加载 HTML/CSS/JS 等 Web 文件，不从线上获取。
 如果进一步把这些 Web Build Tool 的产物[作为网站运行起来](../introduction/getting-started.md#preview)，获得可以从模拟器或空间计算设备上能访问的网址，[把网址提供给 WebSpatial Builder](../api/builder/run.md#--base)，就可以得到不含网站产物的应用包，应用运行过程中会从线上加载 HTML/CSS/JS 等 Web 文件。
 
-## Web Build Tools {#web-build-tool}
+## Web Build Tool {#web-build-tool}
 
 Web Build Tool 是指 Vite、Rspack / Webpack 这类开发工具，能把基于 Web 框架的源代码编译构建成 Web Server 实际提供的 HTML 网页和 CSS、JS 等静态 web 文件。
 

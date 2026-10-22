@@ -31,7 +31,7 @@ export default defineConfig({
 
 ## Rspack
 
-```js title="rspack.config.mjs" {10-11}
+```js title="rspack.config.mjs" {14-15}
 export default {
   module: {
     rules: [

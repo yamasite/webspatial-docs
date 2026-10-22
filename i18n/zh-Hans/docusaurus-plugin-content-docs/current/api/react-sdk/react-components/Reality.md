@@ -60,6 +60,22 @@ import {
   <World>
 ```
 
+除了联合形式 `<Material type="unlit" | "pbr" ... />` 外，还导出了两个独立的材质组件和一个纹理组件，都通过 `id` 注册，再由实体的 `materials` 列表引用：
+
+- `<UnlitMaterial id="..." {...options} />`：不受场景光照影响的平光材质。
+- `<PBRMaterial id="..." {...options} />`：响应场景光照的基于物理的材质。`roughness`（`0` = 镜面光滑，`1` = 完全粗糙）与 `metalness`（`0` = 非金属，`1` = 全金属）约定与 Three.js `MeshStandardMaterial` 一致，所有属性都是响应式的。
+- `<Texture id="..." url="..." onLoad onError />`：绑定到材质的纹理资源。
+
+`<PBRMaterial>` 还提供纯数据的 `MaterialPresets` 预设，可以展开后再覆盖单个属性：
+
+```jsx
+import { PBRMaterial, MaterialPresets } from "@webspatial/react-sdk";
+
+<PBRMaterial id="car" {...MaterialPresets.metal} color="#C0C0C0" />
+```
+
+`MaterialPresets` 内置 `matte`、`glossy`、`plastic`、`metal`、`glass`。预设不是原生概念，新增或调整预设都不需要重新构建原生层。
+
 2. 可以声明 3D 模型文件。
 
 ```js
@@ -108,6 +124,17 @@ Transform 属性默认使用 `<Reality>` 对应的 2D 面片前方局部 3D 空�
 :::
 
 对于 `<World>` 顶层的 Entity 节点，Transform 属性中 `position` 的值是相对于坐标系原点的，对于其他作为子节点的 Entity，Transform 属性中 `position` 的值是相对于父 Entity 的 `position`。
+
+除 `position`、`rotation`、`scale` 外，`<Entity>` 还支持：
+
+| 属性          | 含义                                                                                                                                                       |
+| ------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `id`          | 实体的稳定字符串标识。                                                                                                                                     |
+| `name`        | 实体的可读名称。                                                                                                                                           |
+| `enableInput` | 为 `true` 时，该实体可以成为空间手势的目标（`onSpatialTap`、`onSpatialDrag`、`onSpatialRotate`、`onSpatialMagnify` 及其 start/end 变体），默认为 `false`。 |
+| `animation`   | 由 `useEntityAnimation()` 返回、用于驱动实体变换的动画绑定。                                                                                               |
+
+手势回调（`onSpatialTap` 等）与 `spatialEventOptions` 的载荷形状与[空间交互事件](../event-api/spatial-tap.md)一致，按 Reality 场景的局部坐标系解释。
 
 WebSpatial SDK 目前提供的[开箱即用的 Entity](../../../concepts/3d-content-containers.md#3d-engine-api) 有以下几类：
 
@@ -240,9 +267,17 @@ useEffect(() => {
 
 `<AttachmentEntity>` 是一个类似 `<Plane>` 的 Entity，可以引用[预先声明好的 2D HTML/CSS 内容](#3d-assets)，让它附着在自己表面上。
 
-:::caution[当前限制]
-WebSpatial SDK 后续版本会让 `<AttachmentEntity>` 像 `<Plane>` 一样支持 `width` 和 `height`（当前版本暂不支持）和完整 [Transform 属性](#3d-entity)（当前版本只支持 `position`），需要临时用 `size` 属性设置大小（单位是跟 2D 内容一样的 `px`）。
-:::
+它支持以下属性：
+
+| 属性                            | 含义                                                            |
+| ------------------------------- | --------------------------------------------------------------- |
+| `attachment`                    | 要附着的 [`<AttachmentAsset>`](#3d-assets) 的 `name`，必填。    |
+| `position`、`rotation`、`scale` | [Transform 属性](#3d-entity)，单位为米 / 弧度。                 |
+| `width`、`height`               | 附着表面尺寸，单位为米。                                        |
+| `cornerRadius`                  | 圆角半径，单位为米；非有限值或负值会回退为 `0`。                |
+| `backgroundMaterial`            | 应用于附着表面的[背景材质](../css-api/background-material.md)。 |
+
+没有 `size` 属性；表面尺寸用 `width`/`height` 设置。
 
 ```js
 <Reality>
@@ -257,7 +292,9 @@ WebSpatial SDK 后续版本会让 `<AttachmentEntity>` 像 `<Plane>` 一样支�
       <AttachmentEntity
         attachment="info"
         position={{ x: 0, y: 0, z: 0 }}
-        size={{ width: 100, height: 100 }}
+        width={0.1}
+        height={0.1}
+        cornerRadius={0.01}
       />
     </Entity>
   </World>

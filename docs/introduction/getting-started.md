@@ -64,7 +64,7 @@ The latest version of WebSpatial SDK currently has a bug that temporarily preven
 The [spatial computing](../concepts/spatial-computing.md) platforms currently supported are:
 
 - ✅ [visionOS](https://developer.apple.com/visionos/) (for example, Vision Pro devices): with WebSpatial SDK, a website can be packaged as a [hybrid app](../concepts/webspatial-app.md#packaged-webspatial-app) that includes the full [WebSpatial Runtime](../concepts/webspatial-app.md#webspatial-runtime), submitted to the App Store, and run with native spatial behavior
-- ✅ [PICO OS 6](https://developer.picoxr.com/document/discover/pico-os-6-overview/) (for example, [Project Swan](https://developer.picoxr.com/blog/pico-developer-special-event-2026/) devices): its OS-level [Web App Runtime](https://developer.picoxr.com/zh/document/web/web-app/) includes the [WebSpatial Runtime](../concepts/webspatial-app.md#webspatial-runtime), so WebSpatial APIs on websites can work directly
+- ✅ [PICO OS 6](https://developer.picoxr.com/document/discover/pico-os-6-overview/) (for example, [Project Swan](https://developer.picoxr.com/blog/pico-developer-special-event-2026/) devices): its OS-level [Web App Runtime](https://developer.picoxr.com/document/web/web-app/) includes the [WebSpatial Runtime](../concepts/webspatial-app.md#webspatial-runtime), so WebSpatial APIs on websites can work directly
 
 Spatial computing platforms currently working toward WebSpatial Runtime implementations are:
 
@@ -108,6 +108,10 @@ npm install -D @webspatial/platform-visionos
 
 3. To generate native app bundles, WebSpatial Builder must invoke the native development tools for the target platform. For visionOS, that means you must [install Xcode and visionOS-related components](../how-to/xcode.md).
 
+:::note[Node.js version required]
+WebSpatial Builder requires Node.js 24 or newer, as declared in the package's `engines` field.
+:::
+
 ## Set Up Your Project
 
 ### Step 1: JSX Runtime
@@ -125,9 +129,10 @@ For TypeScript React projects, you only need to configure the [`jsxImportSource`
 ```
 
 :::tip[Related setup guides]
+
 - For TS projects based on Rspack, you also need to [configure `swc-loader`](../how-to/rspack.md).
 - For JavaScript React projects, you need to [configure the JSX Runtime in the web build tool](../how-to/non-ts.md).
-:::
+  :::
 
 ### Step 2: Spatial Boot
 

@@ -55,8 +55,7 @@ The web build tools that have been tested and used most often so far are:
 - Next.js, Remix ([SSR is supported](../how-to/ssr.md))
 - Rspack / Rsbuild / Webpack
 
-> [!CAUTION]
-> **Current limitation**
+> [!CAUTION] > **Current limitation**
 >
 > The latest version of WebSpatial SDK currently has a bug that temporarily prevents support for styled-components.
 
@@ -65,7 +64,7 @@ The web build tools that have been tested and used most often so far are:
 The [spatial computing](../concepts/spatial-computing.md) platforms currently supported are:
 
 - ✅ [visionOS](https://developer.apple.com/visionos/) (for example, Vision Pro devices): with WebSpatial SDK, a website can be packaged as a [hybrid app](../concepts/webspatial-app.md#packaged-webspatial-app) that includes the full [WebSpatial Runtime](../concepts/webspatial-app.md#webspatial-runtime), submitted to the App Store, and run with native spatial behavior
-- ✅ [PICO OS 6](https://developer.picoxr.com/document/discover/pico-os-6-overview/) (for example, [Project Swan](https://developer.picoxr.com/blog/pico-developer-special-event-2026/) devices): its OS-level [Web App Runtime](https://developer.picoxr.com/zh/document/web/web-app/) includes the [WebSpatial Runtime](../concepts/webspatial-app.md#webspatial-runtime), so WebSpatial APIs on websites can work directly
+- ✅ [PICO OS 6](https://developer.picoxr.com/document/discover/pico-os-6-overview/) (for example, [Project Swan](https://developer.picoxr.com/blog/pico-developer-special-event-2026/) devices): its OS-level [Web App Runtime](https://developer.picoxr.com/document/web/web-app/) includes the [WebSpatial Runtime](../concepts/webspatial-app.md#webspatial-runtime), so WebSpatial APIs on websites can work directly
 
 Spatial computing platforms currently working toward WebSpatial Runtime implementations are:
 
@@ -105,8 +104,7 @@ pnpm add @webspatial/react-sdk @webspatial/core-sdk
 
 For spatial computing platforms that do not have a built-in [WebSpatial Runtime](../concepts/webspatial-app.md#webspatial-runtime), the website must be packaged as a [native app that includes WebSpatial Runtime](../concepts/webspatial-app.md#packaged-webspatial-app). That requires these additional installation steps:
 
-> [!TIP]
-> **PICO OS 6 does not need packaging**
+> [!TIP] > **PICO OS 6 does not need packaging**
 >
 > The [Web App Runtime](https://developer.picoxr.com/document/web/web-app/) in [PICO OS 6](https://developer.picoxr.com/document/discover/pico-os-6-overview/) already includes WebSpatial Runtime and can make the WebSpatial APIs on a website work directly, so packaging is not required and none of the extra installation steps below are needed.
 
@@ -152,6 +150,10 @@ pnpm add -D @webspatial/platform-visionos
 
 3. To generate native app bundles, WebSpatial Builder must invoke the native development tools for the target platform. For visionOS, that means you must [install Xcode and visionOS-related components](../how-to/xcode.md).
 
+> [!NOTE] > **Node.js version required**
+>
+> WebSpatial Builder requires Node.js 24 or newer, as declared in the package's `engines` field.
+
 ## Set Up Your Project
 
 ### Step 1: JSX Runtime
@@ -170,8 +172,7 @@ For TypeScript React projects, you only need to configure the [`jsxImportSource`
 // ...
 ```
 
-> [!TIP]
-> **Related setup guides**
+> [!TIP] > **Related setup guides**
 >
 > - For TS projects based on Rspack, you also need to [configure `swc-loader`](../how-to/rspack.md).
 > - For JavaScript React projects, you need to [configure the JSX Runtime in the web build tool](../how-to/non-ts.md).
@@ -195,8 +196,7 @@ createRoot(document.getElementById("root")).render(
 
 This one wrapper is what switches WebSpatial on at the right moment. On spatial computing platforms (in a [WebSpatial Runtime](../concepts/webspatial-app.md#webspatial-runtime)), it loads the spatial capabilities of the SDK and then shows the app with the [WebSpatial API](#webspatial-api) enabled. In ordinary browsers, it just shows the app and skips the loading entirely, so the website stays exactly as fast as before.
 
-> [!TIP]
-> **SSR projects**
+> [!TIP] > **SSR projects**
 >
 > For projects with SSR enabled, `<SpatialBoot>` must live in client-rendered code. See [How to enable WebSpatial in SSR-enabled projects](../how-to/ssr.md).
 
@@ -204,14 +204,12 @@ This one wrapper is what switches WebSpatial on at the right moment. On spatial 
 
 To provide the app information required by a spatial app and the [settings for the start window](../concepts/spatial-scenes.md#start-scene), the current site must [provide a Web App Manifest following the PWA standard](../how-to/minimal-pwa.md).
 
-> [!TIP]
-> **Sample files**
+> [!TIP] > **Sample files**
 >
 > [webspatial-icon-examples.zip](https://webspatial.dev/assets/guide/webspatial-icon-examples.zip) contains icon files and manifest file that already satisfy the PWA requirements.
 > You just need to unzip it into a directory on your website that can be publicly accessed via URL, then embed the manifest file's URL in your HTML with `<link rel="manifest" href="/app.webmanifest" />`.
 
-> [!TIP]
-> **Already a PWA?**
+> [!TIP] > **Already a PWA?**
 >
 > If the current site is already a PWA and can be installed as a PWA in Chrome, you can skip this step.
 
@@ -251,8 +249,7 @@ For spatial computing platforms with a [built-in WebSpatial Runtime](https://dev
 
 Just visit the current website URL in the PICO Browser on the [official simulator](https://developer.picoxr.com/document/spatial-toolkit/learn-about-pico-emulator/) or on a real PICO OS 6 device, then click the "Run as a standalone app" button in the address bar - the website will run as a [Web App with WebSpatial enabled](https://developer.picoxr.com/document/web/install-free/), and you can see the spatialized UI effects and volumetric 3D content produced by WebSpatial.
 
-> [!TIP]
-> **PICO OS 6 simulator networking**
+> [!TIP] > **PICO OS 6 simulator networking**
 >
 > When previewing a local URL as a Web App on the PICO OS 6 simulator, the [URL is not required to use HTTPS](https://developer.picoxr.com/document/web/manifest/), and you need to use the default IP address `10.0.2.2`. For example, `http://10.0.2.2:5173/`.
 >
@@ -272,13 +269,11 @@ Running Builder's [`run` command](../api/builder/run.md) gives you a "one-click 
 webspatial-builder run --base="http://localhost:5173/"
 ```
 
-> [!IMPORTANT]
-> **`run` can use a temporary manifest**
+> [!IMPORTANT] > **`run` can use a temporary manifest**
 >
 > The `run` command allows the Web project to skip providing a Web App Manifest during the early development and debugging phase. In that case, Builder will provide temporary default [app information](../how-to/minimal-pwa.md) (`start_url` is `''`).
 
-> [!CAUTION]
-> **Offline packaging slows iteration**
+> [!CAUTION] > **Offline packaging slows iteration**
 >
 > If [`start_url` is incomplete and missing the domain](../api/builder/run.md#--manifest), and you do not [use `--base` to fill in the base part for `start_url`](../api/builder/run.md#--base), Builder will automatically package the website output into the native app bundle. During runtime, website files are loaded offline from local files inside the app bundle.
 >
@@ -302,8 +297,7 @@ There are two ways to distribute a Web App that includes WebSpatial:
 
 The first is to distribute it as a cross-platform website, spread it through URLs, and get traffic that way. On spatial computing platforms with a built-in WebSpatial Runtime, it can be [accessed on demand by URL](https://tpac2025.webspatial.dev/#instant-apps), used temporarily, or [installed onto a device as a PWA](https://developer.picoxr.com/document/web/installable/).
 
-> [!TIP]
-> **Web Apps on PICO OS 6**
+> [!TIP] > **Web Apps on PICO OS 6**
 >
 > On [PICO OS 6](https://developer.picoxr.com/document/discover/pico-os-6-overview/) devices, a Web App can also [run independently](https://developer.picoxr.com/document/web/install-free/) outside the browser without being installed, and WebSpatial effects are enabled automatically.
 

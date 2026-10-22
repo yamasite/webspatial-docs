@@ -16,7 +16,7 @@ If the [Spatial Scene container](../../../concepts/spatial-scenes.md) is of type
 The conversion ratio also differs across spatial computing platforms, so this API should be used consistently for unit conversion.
 
 :::caution[Only works in a WebSpatial environment]
-`useMetrics` can only be called after the spatial capabilities of the SDK have finished loading in a WebSpatial environment — calling it anywhere else throws an error and crashes the app. Put components that call it inside [`<SpatialBoot>`](../react-components/SpatialBoot.md), and render them only on spatial platforms, for example with [runtime detection](../dom-api/userAgent.md).
+`useMetrics` itself is SSR-safe and never throws when called, but the returned conversion functions only work after the spatial capabilities of the SDK have finished loading in a WebSpatial environment. Invoking `pointToPhysical`/`physicalToPoint` in plain web, during SSR, or before boot resolves throws a `WebSpatialRuntimeError`. Put components that call it inside [`<SpatialBoot>`](../react-components/SpatialBoot.md), and render them only on spatial platforms, for example with [runtime detection](../dom-api/userAgent.md).
 :::
 
 ## Signature
@@ -85,4 +85,18 @@ pointToPhysical(value: number, options?: MetricConvertOptions): number
 
 ```ts
 physicalToPoint(value: number, options?: MetricConvertOptions): number
+```
+
+## Lifecycle: placeholder vs. real implementation {#lifecycle}
+
+Whether a component instance gets the real implementation or the web placeholder is decided **once, when the component first mounts**, based on whether the spatial runtime is ready at that moment:
+
+- If the runtime is already ready, the instance gets the real `useMetrics`.
+- Otherwise the instance gets a frozen placeholder whose `pointToPhysical`/`physicalToPoint` always throw a `WebSpatialRuntimeError`. The two function references are stable across renders, so they are safe to use in `useEffect` dependency arrays.
+
+The choice never switches during the instance's lifetime: a component that mounted the placeholder keeps using it even after `bootSpatial()` later resolves. To pick up the real implementation, the component **must be unmounted and remounted** — for example by changing its `key`, unmounting its parent, or reloading the page.
+
+```jsx
+// After boot resolves, force remount so the placeholder upgrades to the real hook.
+<SpatialReadyKeyedDiv key={booted ? "real" : "placeholder"} />
 ```

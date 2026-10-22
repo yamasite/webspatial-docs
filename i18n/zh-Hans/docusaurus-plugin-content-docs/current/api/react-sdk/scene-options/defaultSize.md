@@ -9,12 +9,12 @@ description: '设置空间场景创建时请求的初始宽度、高度和深度
 
 ## 适用范围与设置方式 {#declared-in}
 
-| 项目 | 内容 |
-| --- | --- |
-| 适用于 | `window` 类型场景支持 `width` 和 `height`；`volume` 类型场景还支持 `depth`。 |
-| 新场景 | 通过 [`initScene`](../js-api/initScene.md) 设置。 |
-| 起始场景 | 通过 [Web App Manifest](../manifest-options/main-scene.md) 设置。 |
-| 默认值 | 无 |
+| 项目     | 内容                                                                         |
+| -------- | ---------------------------------------------------------------------------- |
+| 适用于   | `window` 类型场景支持 `width` 和 `height`；`volume` 类型场景还支持 `depth`。 |
+| 新场景   | 通过 [`initScene`](../js-api/initScene.md) 设置。                            |
+| 起始场景 | 通过 [Web App Manifest](../manifest-options/main-scene.md) 设置。            |
+| 默认值   | 无需手动设置；未设置时会使用内置默认值（见[默认值](#default-value)）。       |
 
 ## 类型定义 {#type}
 
@@ -33,17 +33,20 @@ description: '设置空间场景创建时请求的初始宽度、高度和深度
 ```js title="通过 initScene 设置新场景的 defaultSize" {6-11}
 import { initScene } from "@webspatial/react-sdk";
 
-initScene("newSceneName", defaultConfig => {
-  return {
-    ...defaultConfig,
-    type: "volume",
-    defaultSize: {
-      width: 500,
-      height: "1000px",
-      depth: "1m",
-    },
-  };
-});
+initScene(
+  "newSceneName",
+  defaultConfig => {
+    return {
+      ...defaultConfig,
+      defaultSize: {
+        width: 500,
+        height: "1000px",
+        depth: "1m",
+      },
+    };
+  },
+  { type: "volume" },
+);
 window.open(newSceneUrl, "newSceneName");
 ```
 
@@ -68,12 +71,19 @@ window.open(newSceneUrl, "newSceneName");
 
 ## 默认值 {#default-value}
 
-无
+你不必手动设置 `defaultSize`。当场景创建时没有提供它，WebSpatial 运行时会套用内置的默认尺寸：
+
+| 场景类型 | 内置默认 `defaultSize`                                                   |
+| -------- | ------------------------------------------------------------------------ |
+| `window` | `{ width: 1280, height: 720 }`（像素）                                   |
+| `volume` | `{ width: "0.94m", height: "0.94m", depth: "0.94m" }`（0.94 m 的立方体） |
+
+手动提供的 `defaultSize` 会覆盖对应场景的上述默认值。
 
 ## 可接受的值 {#accepted-values}
 
-| 字段 | 可接受的值 |
-| --- | --- |
-| `width` | 数字（默认单位是 `px`）或带单位后缀的字符串，比如 `"100px"`、`"2m"`。 |
+| 字段     | 可接受的值                                                            |
+| -------- | --------------------------------------------------------------------- |
+| `width`  | 数字（默认单位是 `px`）或带单位后缀的字符串，比如 `"100px"`、`"2m"`。 |
 | `height` | 数字（默认单位是 `px`）或带单位后缀的字符串，比如 `"100px"`、`"2m"`。 |
-| `depth` | 数字（默认单位是 `px`）或带单位后缀的字符串，比如 `"100px"`、`"2m"`。 |
+| `depth`  | 数字（默认单位是 `px`）或带单位后缀的字符串，比如 `"100px"`、`"2m"`。 |

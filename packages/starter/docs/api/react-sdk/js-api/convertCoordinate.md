@@ -54,4 +54,14 @@ This position must use the coordinate values and default unit of the coordinate 
 Promise<CoordinateLike>;
 ```
 
-Returns a Promise that resolves to the converted coordinate point.
+Returns a Promise that resolves to the converted coordinate point. If the underlying bridge returns no value, the original `position` is returned unchanged.
+
+## Error Behavior
+
+`convertCoordinate` is async and fail-fast: it rejects with a `WebSpatialRuntimeError` in any of the following cases:
+
+1. **Unsupported runtime** — the current runtime does not support `convertCoordinate` (`supports('convertCoordinate')` is false), e.g. an ordinary browser or a runtime without the capability.
+2. **Invalid `from`/`to`** — either argument cannot be resolved to a coordinate-convertible object (a `window`, a spatialized element ref, an Entity ref, or a `<Model>` ref).
+3. **Before boot** — `bootSpatial()` has not resolved, so there is no active spatial scene.
+
+Call it only inside a booted WebSpatial runtime (render under [`<SpatialBoot>`](../react-components/SpatialBoot.md) and gate on runtime detection), and treat the rejection as a hard error rather than retrying synchronously.

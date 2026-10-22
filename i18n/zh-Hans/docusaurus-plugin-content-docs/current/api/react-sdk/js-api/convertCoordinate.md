@@ -54,4 +54,14 @@ type CoordinateLike = { x: number; y: number; z: number };
 Promise<CoordinateLike>;
 ```
 
-返回一个 Promise，resolve 后得到转换后的坐标点。
+返回一个 Promise，resolve 后得到转换后的坐标点。如果底层桥接没有返回值，会原样返回传入的 `position`。
+
+## 错误行为 {#error-behavior}
+
+`convertCoordinate` 是异步且 fail-fast 的，在以下任一情况下会以 `WebSpatialRuntimeError` reject：
+
+1. **运行时不支持**：当前运行时不支持 `convertCoordinate`（`supports('convertCoordinate')` 为 false），例如普通浏览器或缺少该能力的运行时。
+2. **`from`/`to` 无效**：任一参数无法解析为可转换坐标的对象（`window`、空间化元素 ref、Entity ref 或 `<Model>` ref）。
+3. **启动前调用**：`bootSpatial()` 尚未 resolve，还没有激活的空间场景。
+
+请只在已启动的 WebSpatial 运行时中调用（在 [`<SpatialBoot>`](../react-components/SpatialBoot.md) 下渲染并按运行时检测做门控），并把 reject 当作硬错误处理，不要同步重试。

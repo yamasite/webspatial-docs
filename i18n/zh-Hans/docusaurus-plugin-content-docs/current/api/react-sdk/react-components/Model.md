@@ -5,8 +5,8 @@ description: '使用接近 Web 标准 `<model>` 的 API，在空间化容器中�
 
 # `<Model>`
 
-:::info[版本要求]
-本页记录的 API 需要 `@webspatial/react-sdk` `1.7.0` 或更高版本。
+:::info[可用性]
+`<Model>` 组件以及本页记录的 API 随当前版本的 `@webspatial/react-sdk` 一起提供。有体积的渲染行为运行在已启动的 WebSpatial Runtime 中（置于 `<SpatialBoot>` 之后），请使用与该运行时一同发布的包版本。
 :::
 
 `<Model>` 组件实现了 WebSpatial API 中的[静态 3D 内容容器元素](../../../concepts/3d-content-containers.md)，这种元素兼容 Web 标准中的 `<model>` 元素的 API，同时对 web 标准中的能力做了增强，不仅让元素对应的 2D 面片具备了[空间化 HTML 元素的能力](../../../concepts/spatialized-html-elements.md)，也让 3D 模型能在这个 2D 面片前方的空间中渲染出有真实体积的 3D 内容。
@@ -111,6 +111,14 @@ function LongScrollPage() {
 }
 ```
 
+### `stagemode` {#stagemode}
+
+```ts
+stagemode?: "orbit" | "none";
+```
+
+设为 `"orbit"` 时，由原生层驱动模型的变换，该 `<Model>` 的所有 `onSpatial*` 手势回调都会被禁用（在容器挂载前即被剥离）。默认 `"none"` 保留手势。
+
 ## 子元素 {#child-elements}
 
 ### `<source>` {#source}
@@ -139,6 +147,23 @@ function LongScrollPage() {
 
 当模型加载失败时触发。如果提供了多个 source，这个事件只会在所有 source 都已尝试且全部失败后触发，不会针对每一次单独的 source 加载失败触发。
 
+## 手势事件 {#gesture-events}
+
+当模型以有真实体积的方式渲染时，它支持与其他空间化元素相同的[空间交互事件](../../../concepts/natural-interactions.md#spatial-interactions)，事件目标类型为 `<Model>` 的 ref：
+
+| 阶段     | JSX 属性              | 事件类型                      |
+| -------- | --------------------- | ----------------------------- |
+| 点按     | `onSpatialTap`        | `ModelSpatialTapEvent`        |
+| 拖拽开始 | `onSpatialDragStart`  | `ModelSpatialDragStartEvent`  |
+| 拖拽中   | `onSpatialDrag`       | `ModelSpatialDragEvent`       |
+| 拖拽结束 | `onSpatialDragEnd`    | `ModelSpatialDragEndEvent`    |
+| 旋转中   | `onSpatialRotate`     | `ModelSpatialRotateEvent`     |
+| 旋转结束 | `onSpatialRotateEnd`  | `ModelSpatialRotateEndEvent`  |
+| 捏合缩放 | `onSpatialMagnify`    | `ModelSpatialMagnifyEvent`    |
+| 捏合结束 | `onSpatialMagnifyEnd` | `ModelSpatialMagnifyEndEvent` |
+
+可选的 `spatialEventOptions={{ constrainedToAxis }}` 可将旋转手势约束到某个轴，参见[Spatial Rotate](../event-api/spatial-rotate.md#spatialeventoptions)。当 [`stagemode`](#stagemode) 为 `"orbit"` 时这些回调会被忽略；当 `<Model>` 回退为标准 `<model>` 元素时也会被剥离。
+
 ## JavaScript API {#javascript-api}
 
 下面这些 JavaScript API 可以通过指向 `<Model>` 元素的 React ref 访问。
@@ -157,6 +182,14 @@ function LongScrollPage() {
 一个可读可写的 DOMMatrixReadOnly，可以表示 [3D 模型和 3D 内容容器内部空间之间的关系](https://github.com/immersive-web/model-element/blob/main/explainer.md#visual-presentation-control)。
 
 在默认状态下，3D 模型会在保持原有比例的前提下，尽可能撑满 `<Model>` 的宽或高，因此可以通过控制 `<Model>` 对应的 2D 面片的尺寸来控制 3D 模型的大小。
+
+`boundingBoxCenter`
+
+只读 `DOMPointReadOnly`，表示模型在容器局部空间中轴对齐包围盒的中心点。
+
+`boundingBoxExtents`
+
+只读 `DOMPointReadOnly`，表示模型包围盒在容器局部空间各轴上的整体尺寸（extents）。
 
 ### Animation Playback API {#animation-playback-api}
 

@@ -62,9 +62,12 @@ div {
 
 `background-material` takes an enum value:
 
-- `translucent`
-- `transparent`
-- `none`
+- `none` — the default. The webpage window keeps its native opaque background; spatialized HTML elements get a transparent background.
+- `translucent` — a glass-like translucent material.
+- `thick` — a thicker translucent material.
+- `regular` — a regular (medium) translucent material.
+- `thin` — a thin translucent material.
+- `transparent` — a fully transparent background with no backplate.
 
 ## Initial Value
 

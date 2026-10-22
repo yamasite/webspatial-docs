@@ -62,9 +62,12 @@ div {
 
 `background-material` 的值是枚举值：
 
-- `translucent`
-- `transparent`
-- `none`
+- `none` — 默认值。网页窗口保持原生不透明背景；空间化 HTML 元素背景透明。
+- `translucent` — 玻璃质感的半透明材质。
+- `thick` — 更厚的半透明材质。
+- `regular` — 普通（中等）厚度的半透明材质。
+- `thin` — 更薄的半透明材质。
+- `transparent` — 完全透明、无底板的背景。
 
 ## 初始值 {#initial-value}
 

@@ -60,6 +60,22 @@ The following 3D asset declarations can appear among the top-level children of `
   <World>
 ```
 
+Besides the union `<Material type="unlit" | "pbr" ... />` form, two standalone material components and a texture component are exported, each registered under an `id` that entities reference through their `materials` list:
+
+- `<UnlitMaterial id="..." {...options} />` — a flat-shaded material that ignores scene lighting.
+- `<PBRMaterial id="..." {...options} />` — a physically based material that responds to scene lighting. `roughness` (`0` = mirror smooth, `1` = fully rough) and `metalness` (`0` = dielectric, `1` = full metal) follow the same conventions as Three.js `MeshStandardMaterial`. All props are reactive.
+- `<Texture id="..." url="..." onLoad onError />` — a texture resource bound into a material.
+
+Tuned starting points for `<PBRMaterial>` are available as the pure-data `MaterialPresets` object — spread one in and override props as needed:
+
+```jsx
+import { PBRMaterial, MaterialPresets } from "@webspatial/react-sdk";
+
+<PBRMaterial id="car" {...MaterialPresets.metal} color="#C0C0C0" />
+```
+
+`MaterialPresets` ships `matte`, `glossy`, `plastic`, `metal`, and `glass`. Presets are not a native concept; adding or tweaking one requires no native rebuild.
+
 2. 3D model files can be declared.
 
 ```js
@@ -103,12 +119,22 @@ The following 3D asset declarations can appear among the top-level children of `
 
 Transform props use the coordinate system of the local 3D space in front of the 2D plane corresponding to `<Reality>` by default, with the origin at the center point of that space. It uses a right-handed coordinate system, with Y pointing upward, Z pointing toward the user, and lengths expressed by default in the physical world unit (`m`) oriented toward real-world objects.
 
-> [!TIP]
-> **Related APIs**
+> [!TIP] > **Related APIs**
 >
 > The depth of this space can be set with [`depth`](../css-api/depth.md) and the current depth can be queried with [`clientDepth`](../dom-api/clientDepth.md).
 
 For Entity nodes directly under `<World>`, the `position` value in Transform props is relative to the coordinate-system origin. For other Entity nodes used as children, the `position` value in Transform props is relative to the parent Entity's `position`.
+
+Beyond `position`, `rotation`, and `scale`, `<Entity>` accepts:
+
+| Prop          | Meaning                                                                                                                                                                                    |
+| ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `id`          | Stable string identifier for the entity.                                                                                                                                                   |
+| `name`        | Human-readable name for the entity.                                                                                                                                                        |
+| `enableInput` | When `true`, the entity can be the target of spatial gestures (`onSpatialTap`, `onSpatialDrag`, `onSpatialRotate`, `onSpatialMagnify`, and their start/end variants). Defaults to `false`. |
+| `animation`   | A motion binding returned by `useEntityAnimation()` that drives the entity's transform.                                                                                                    |
+
+The gesture handlers themselves (`onSpatialTap`, etc.) and `spatialEventOptions` follow the same payload shapes as the [spatial interaction events](../event-api/spatial-tap.md), interpreted in the Reality scene's local axes.
 
 The ready-to-use [Entities](../../../concepts/3d-content-containers.md#3d-engine-api) currently provided by WebSpatial SDK fall into the following categories:
 
@@ -241,10 +267,17 @@ useEffect(() => {
 
 `<AttachmentEntity>` is an Entity similar to `<Plane>`. It can reference [predeclared 2D HTML/CSS content](#3d-assets) and attach that content onto its own surface.
 
-> [!CAUTION]
-> **Current limitation**
->
-> In a later version of WebSpatial SDK, `<AttachmentEntity>` will support `width` and `height` like `<Plane>` does, which it does not currently support, and full [Transform props](#3d-entity), whereas the current version only supports `position`. For now, you need to use the `size` prop to set the size, with the same `px` unit used by 2D content.
+It accepts the following props:
+
+| Prop                            | Meaning                                                                                                      |
+| ------------------------------- | ------------------------------------------------------------------------------------------------------------ |
+| `attachment`                    | The `name` of the [`<AttachmentAsset>`](#3d-assets) whose HTML content is attached to this entity. Required. |
+| `position`, `rotation`, `scale` | [Transform props](#3d-entity), in meters / radians.                                                          |
+| `width`, `height`               | Surface size in meters.                                                                                      |
+| `cornerRadius`                  | Rounded corner radius in meters; non-finite or negative values fall back to `0`.                             |
+| `backgroundMaterial`            | A [background material](../css-api/background-material.md) applied to the attachment surface.                |
+
+There is no `size` prop; set the surface size with `width`/`height` instead.
 
 ```js
 <Reality>
@@ -259,7 +292,9 @@ useEffect(() => {
       <AttachmentEntity
         attachment="info"
         position={{ x: 0, y: 0, z: 0 }}
-        size={{ width: 100, height: 100 }}
+        width={0.1}
+        height={0.1}
+        cornerRadius={0.01}
       />
     </Entity>
   </World>

@@ -10,16 +10,16 @@ Only Spatial Scenes of type `volume` support `worldAlignment`.
 
 ## Availability {#declared-in}
 
-| Item | Value |
-| --- | --- |
-| Applies to | Only `volume` Spatial Scenes. |
-| New scenes | Set through [`initScene`](../js-api/initScene.md). |
-| Start scene | Set through the [Web App Manifest](../manifest-options/main-scene.md). |
-| Default value | `"automatic"` |
+| Item          | Value                                                                  |
+| ------------- | ---------------------------------------------------------------------- |
+| Applies to    | Only `volume` Spatial Scenes.                                          |
+| New scenes    | Set through [`initScene`](../js-api/initScene.md).                     |
+| Start scene   | Set through the [Web App Manifest](../manifest-options/main-scene.md). |
+| Default value | `"automatic"`                                                          |
 
 ## Type Signature {#type}
 
-`"automatic" | "gravityAligned"`
+`"adaptive" | "automatic" | "gravityAligned"`
 
 ## Examples
 
@@ -41,16 +41,16 @@ window.open(newSceneUrl, "newSceneName");
 ### Using the Web App Manifest
 
 :::caution[Manifest key naming]
-In a Web App Manifest, convert camelCase keys such as `worldAlignment` to lowercase snake_case such as `world_alignment`.
+In the build-time `xr_main_scene` key, write the option in camelCase — `worldAlignment` — exactly as shown below. WebSpatial Builder ignores the snake_case spelling `world_alignment` inside `xr_main_scene`. The separate runtime `xr_spatial_scene` key accepts both spellings; see [main-scene](../manifest-options/main-scene.md#runtime-key-xr_spatial_scene).
 :::
 
-```json title="Set world_alignment for the start scene" {5-6}
+```json title="Set worldAlignment for the start scene" {5-6}
 {
   "name": "example app",
   "start_url": "/",
   "xr_main_scene": {
     "type": "volume",
-    "world_alignment": "gravityAligned"
+    "worldAlignment": "gravityAligned"
   }
 }
 ```
@@ -61,7 +61,8 @@ In a Web App Manifest, convert camelCase keys such as `worldAlignment` to lowerc
 
 ## Accepted Values {#accepted-values}
 
-| Value | Meaning |
-| --- | --- |
-| `"automatic"` | Tilts automatically during vertical movement so it always faces the user. |
+| Value              | Meaning                                                                                                              |
+| ------------------ | -------------------------------------------------------------------------------------------------------------------- |
+| `"adaptive"`       | The runtime adaptively chooses how the scene aligns based on context.                                                |
+| `"automatic"`      | Tilts automatically during vertical movement so it always faces the user.                                            |
 | `"gravityAligned"` | Does not tilt automatically during vertical movement and always stays aligned with gravity like a real-world object. |

@@ -39,3 +39,30 @@ Web 标准中现有的 `opacity`、`display: none`、`visibility: hidden` 等 AP
 出于性能和复杂性方面的考虑，WebSpatial SDK 只支持在遵循 [Rules of React](https://react.dev/reference/rules) 的声明式代码中修改 CSS（比如在 JSX 中改变 `className` 或 `style`），如果想要通过 DOM API 查询当前状态，需要用 React 的 `useRef` 获取空间化 HTML 元素对应的 DOM 对象，不能用 `querySelector` 之类的非 React 方式直接查询 DOM 对象。
 
 WebSpatial SDK 暂时还不支持把空间化 HTML 元素的 CSS 属性添加到 CSS 动画里，只支持 JS 动画的实现方式。
+
+## `onSpatialContentReady`：感知宿主何时连接完成 {#onspatialcontentready}
+
+对于空间化 2D 容器（`<SpatialDiv>`），可以传入 `onSpatialContentReady`，在内容宿主元素连接完成后执行命令式代码：
+
+```tsx
+<SpatialDiv
+  onSpatialContentReady={({ host }) => {
+    // host 是已连接的 HTMLElement——空间运行时中是 portal 根节点，
+    // 普通浏览器上是网页回退宿主。
+    return () => {
+      // 可选的清理函数，在宿主断开连接时执行。
+    };
+  }}
+/>
+```
+
+```ts
+type SpatialContentReadyContext = { host: HTMLElement };
+type SpatialContentReadyCallback = (
+  ctx: SpatialContentReadyContext,
+) => void | (() => void);
+```
+
+- 回调接收 `ctx.host`，即已连接的宿主元素（空间 portal 根节点，或非空间运行时下的网页回退宿主）。
+- 从回调返回一个函数即可注册为断开连接时的清理逻辑。
+- 该属性是空间化 2D 容器特有的，不属于 `<Model>` 或 `<Reality>` 的 API。

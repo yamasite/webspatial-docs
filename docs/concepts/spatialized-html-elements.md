@@ -39,3 +39,30 @@ All spatialized HTML elements support the new [spatial interaction events](./nat
 For performance and complexity reasons, WebSpatial SDK only supports CSS updates in declarative code that follows the [Rules of React](https://react.dev/reference/rules), such as changing `className` or `style` in JSX. If you want to query the current state through DOM APIs, you need to use React's `useRef` to obtain the DOM object for the spatialized HTML element. Direct DOM queries through non-React approaches such as `querySelector` are not supported.
 
 WebSpatial SDK does not currently support adding CSS properties of spatialized HTML elements into CSS animations. Only JS-based animation approaches are supported.
+
+## `onSpatialContentReady`: knowing when the host is connected {#onspatialcontentready}
+
+For a spatialized 2D container (`<SpatialDiv>`), pass `onSpatialContentReady` to run imperative code once the content host element is connected:
+
+```tsx
+<SpatialDiv
+  onSpatialContentReady={({ host }) => {
+    // host is the connected HTMLElement — the portal root in a spatial
+    // runtime, or the web fallback host on an ordinary browser.
+    return () => {
+      // optional cleanup, run when the host disconnects.
+    };
+  }}
+/>
+```
+
+```ts
+type SpatialContentReadyContext = { host: HTMLElement };
+type SpatialContentReadyCallback = (
+  ctx: SpatialContentReadyContext,
+) => void | (() => void);
+```
+
+- The callback receives `ctx.host`, the connected host element (the spatial portal root, or the web fallback host when not in a spatial runtime).
+- Returning a function from the callback registers it as cleanup run on disconnect.
+- This prop is specific to spatialized 2D containers. It is not part of the `<Model>` or `<Reality>` APIs.

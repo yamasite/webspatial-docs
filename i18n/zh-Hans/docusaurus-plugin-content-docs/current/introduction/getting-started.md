@@ -28,8 +28,8 @@ WebSpatial 是一套[对 HTML/CSS/DOM API 的最小化扩展](https://tpac2025.w
 
 ### WebSpatial SDK {#webspatial-sdk}
 
-1. **前瞻性预实现**：结合[原生 Runtime 实现](../concepts/webspatial-app.md#webspatial-runtime)，在 React 项目的 JSX、Ref、CSS 里[提前模拟实现拟议标准](https://www.w3.org/2001/tag/doc/polyfills/)中的 HTML/DOM/CSS API，让 [WebSpatial API](#webspatial-api) 现在就立即可用 ，不用等待各个平台上的浏览器引擎正式支持这些 API。
-2. **跨版本兼容**：屏蔽了 WebSpatial API 进入 Web 标准（HTML/CSS/DOM）过程中的不稳定、变动和平台差异，SDK 提供的 API 始终保持向后兼容，让旧代码一直可运行
+1. **前瞻性预实现**：结合[原生 Runtime 实现](../concepts/webspatial-app.md#webspatial-runtime)，在 React 项目的 JSX、Ref、CSS 里[提前模拟实现拟议标准](https://www.w3.org/2001/tag/doc/polyfills/)中的 HTML/DOM/CSS API，让 [WebSpatial API](#webspatial-api) 现在就立即可用，不用等待各个平台上的浏览器引擎正式支持这些 API。
+2. **跨版本兼容**：屏蔽了 WebSpatial API 进入 Web 标准（HTML/CSS/DOM）过程中的不稳定、变动和平台差异，SDK 提供的 API 始终保持向后兼容，让旧代码一直可运行。
 3. **跨平台兼容**：在支持[空间计算和统一渲染](../concepts/spatial-computing.md)的平台上，会尽量屏蔽差异，提供跨平台统一的空间应用概念和空间化 UI 特性。在不支持空间计算和统一渲染的平台上，会自动忽略 WebSpatial API、不加载完整的 SDK 实现，不影响网页在桌面电脑、手机等屏幕设备和普通浏览器里的效果和性能。
 4. **自定义跨平台逻辑**：提供特性检测和 [Runtime 检测](../api/react-sdk/dom-api/userAgent.md)方法，可以对少数无法自动忽略的 JS API / DOM API 调用做自定义的跨平台处理，也可以在空间计算平台上启用自定义的增强效果和专属功能。
 5. **应用打包**：支持把 PWA 打包成[自带 WebSpatial Runtime、无外部依赖](../concepts/webspatial-app.md#packaged-webspatial-app)的原生应用安装包（比如 visionOS 应用），跟原生应用一样能在模拟器或真机设备上安装和[运行调试](#preview)，能[上架到 visionOS App Store 这样的应用商店](#distribution)。
@@ -64,7 +64,7 @@ WebSpatial SDK 最新版本暂时有 bug，导致暂时不支持 styled-componen
 目前支持的[空间计算](../concepts/spatial-computing.md)平台有：
 
 - ✅ [visionOS](https://developer.apple.com/visionos/)（比如 Vision Pro 设备）：可以用 WebSpatial SDK 把网站打包成包含完整 [WebSpatial Runtime](../concepts/webspatial-app.md#webspatial-runtime) 的 [hybrid app](../concepts/webspatial-app.md#packaged-webspatial-app) 上架 App Store，具备原生的空间化效果
-- ✅ [PICO OS 6](https://developer.picoxr.com/document/discover/pico-os-6-overview/) (比如 [Project Swan](https://developer.picoxr.com/blog/pico-developer-special-event-2026/) 设备)：在操作系统里的 [Web App Runtime](https://developer.picoxr.com/zh/document/web/web-app/) 里内置了 [WebSpatial Runtime](../concepts/webspatial-app.md#webspatial-runtime)，可直接让网站中的 WebSpatial API 生效
+- ✅ [PICO OS 6](https://developer.picoxr.com/document/discover/pico-os-6-overview/) (比如 [Project Swan](https://developer.picoxr.com/blog/pico-developer-special-event-2026/) 设备)：在操作系统里的 [Web App Runtime](https://developer.picoxr.com/document/web/web-app/) 里内置了 [WebSpatial Runtime](../concepts/webspatial-app.md#webspatial-runtime)，可直接让网站中的 WebSpatial API 生效
 
 正在推进 WebSpatial Runtime 实现的空间计算平台有：
 
@@ -108,6 +108,10 @@ npm install -D @webspatial/platform-visionos
 
 3. 为了打包生成原生应用，WebSpatial Builder 需要调用对应平台的原生开发工具，因此如果要支持 visionOS，需要[安装 Xcode 和 visionOS 相关组件](../how-to/xcode.md)。
 
+:::note[需要的 Node.js 版本]
+WebSpatial Builder 要求 Node.js 24 或更高版本，与该包 `engines` 字段中声明的版本一致。
+:::
+
 ## 配置项目 {#set-up-your-project}
 
 ### 步骤 1：JSX Runtime {#step-1-jsx-runtime}
@@ -125,9 +129,10 @@ npm install -D @webspatial/platform-visionos
 ```
 
 :::tip[相关配置指南]
+
 - 对于基于 Rspack 的 TS 项目，还需要[配置 `swc-loader`](../how-to/rspack.md)。
 - 用 JavaScript 的 React 项目，需要[在 Web Build Tool 里配置 JSX Runtime](../how-to/non-ts.md)。
-:::
+  :::
 
 ### 步骤 2：Spatial Boot {#step-2-spatial-boot}
 

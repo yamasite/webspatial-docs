@@ -19,9 +19,9 @@ description: '读取当前设备、操作系统，以及是否运行在 WebSpati
 
 如果从 User Agent 字符串中能匹配到 `/\sVR\s/`，说明当前运行环境支持 WebXR。
 
-如果从 User Agent 字符串中能匹配到 `\swv\)`，说明当前运行环境的 Web Runtime 是 WebView。
+如果从 User Agent 字符串中能匹配到 `/\swv\)/`，说明当前运行环境的 Web Runtime 是 WebView。
 
-如果从 User Agent 字符串中能匹配到 `/WSAppShell\/(\S+)/`，说明当前运行环境是自带 WebSpatial Runtime 的 [Packaged WebSpatial App](../../../concepts/webspatial-app.md#packaged-webspatial-app)。如果还能匹配到 `"Macintosh"`，说明是 visionOS 环境。
+如果从 User Agent 字符串中能匹配到 `/WSAppShell\/(\S+)/`，说明当前运行环境是自带 WebSpatial Runtime 的 [Packaged WebSpatial App](../../../concepts/webspatial-app.md#packaged-webspatial-app)。如果还能匹配到 `/Mac OS X/i`，说明是 visionOS 环境。
 
 如果从 User Agent 字符串中能匹配到 `/PicoWebApp\/(\S+)/`，说明当前运行环境是 [PICO OS 6 的 Web App Runtime](https://developer.picoxr.com/document/web/web-platform/)。
 

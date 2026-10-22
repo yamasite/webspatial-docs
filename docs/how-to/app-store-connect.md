@@ -7,9 +7,9 @@ description: 'Test Packaged WebSpatial Apps on visionOS devices and submit build
 
 ## Prerequisites {#prerequisites}
 
-| What you need | Where to get it | How it is used later |
-| --- | --- | --- |
-| **Team ID** | [Apple developer account dashboard](https://developer.apple.com/account) | Passed to Builder as `--teamId`. |
+| What you need | Where to get it                                                                                                       | How it is used later                |
+| ------------- | --------------------------------------------------------------------------------------------------------------------- | ----------------------------------- |
+| **Team ID**   | [Apple developer account dashboard](https://developer.apple.com/account)                                              | Passed to Builder as `--teamId`.    |
 | **Bundle ID** | [Certificates, Identifiers & Profiles -> Identifiers](https://developer.apple.com/account/resources/identifiers/list) | Passed to Builder as `--bundle-id`. |
 
 ## Device Testing {#device-testing}
@@ -19,7 +19,7 @@ description: 'Test Packaged WebSpatial Apps on visionOS devices and submit build
 3. Register that device in [Certificates, Identifiers & Profiles -> Devices](https://developer.apple.com/account/resources/devices/list).
 4. Run the [WebSpatial Builder `build` command](../api/builder/build.md) in the Web project with both **Team ID** and **Bundle ID**:
 
-```bash title="Build an IPA for a registered test device" {2-3}
+```bash title="Build an IPA for a registered test device" {2-4}
 webspatial-builder build \
   --base=$PREVIEW_SERVER \
   --bundle-id=$APPLE_BUNDLE_ID \
@@ -37,7 +37,7 @@ Before uploading, fill in the screenshots, marketing copy, review information, p
 1. Open the app record from [App Store Connect](https://appstoreconnect.apple.com/apps).
 2. Run the [WebSpatial Builder `publish` command](../api/builder/publish.md) with the version and account credentials in addition to **Team ID** and **Bundle ID**:
 
-```bash title="Build and upload an App Store submission" {2-6}
+```bash title="Build and upload an App Store submission" {2-7}
 webspatial-builder publish \
   --base=$PRODUCT_SERVER \
   --bundle-id=$APPLE_BUNDLE_ID \

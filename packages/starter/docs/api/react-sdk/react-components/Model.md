@@ -6,7 +6,7 @@ description: 'Render 3D model files inside a spatialized container using the Web
 # `<Model>`
 
 > [!IMPORTANT]
-> These APIs require `@webspatial/react-sdk` version `1.7.0` or later.
+> The `<Model>` component and the APIs on this page ship with the current `@webspatial/react-sdk`. Volumetric rendering runs in a booted WebSpatial Runtime behind `<SpatialBoot>`; use the package version published alongside that runtime.
 
 The `<Model>` component implements the [static 3D content container element](../../../concepts/3d-content-containers.md) in the WebSpatial API. This element is compatible with the API of the `<model>` element in Web standards, while also enhancing the standard capability so that the 2D plane corresponding to the element gains the capabilities of a [spatialized HTML element](../../../concepts/spatialized-html-elements.md), and the 3D model can render truly volumetric 3D content in the space in front of that 2D plane.
 
@@ -110,6 +110,14 @@ function LongScrollPage() {
 }
 ```
 
+### `stagemode`
+
+```ts
+stagemode?: "orbit" | "none";
+```
+
+When set to `"orbit"`, the native layer drives the model's transform and all `onSpatial*` gesture handlers are disabled for that `<Model>` (they are stripped before the container mounts). The default, `"none"`, leaves gestures enabled.
+
 ## Child Elements
 
 ### `<source>` {#source}
@@ -138,6 +146,23 @@ Triggered when the 3D model has loaded successfully and is ready for display and
 
 Triggered when the model fails to load. If multiple sources are provided, this event fires only after all sources have been attempted and have failed; it does not fire for each individual source failure.
 
+## Gesture Events
+
+When the model renders volumetrically, it supports the same [spatial interaction events](../../../concepts/natural-interactions.md#spatial-interactions) as other spatialized elements, with event targets typed as the `<Model>` ref:
+
+| Stage       | JSX prop              | Event type                    |
+| ----------- | --------------------- | ----------------------------- |
+| Tap         | `onSpatialTap`        | `ModelSpatialTapEvent`        |
+| Drag start  | `onSpatialDragStart`  | `ModelSpatialDragStartEvent`  |
+| Dragging    | `onSpatialDrag`       | `ModelSpatialDragEvent`       |
+| Drag end    | `onSpatialDragEnd`    | `ModelSpatialDragEndEvent`    |
+| Rotating    | `onSpatialRotate`     | `ModelSpatialRotateEvent`     |
+| Rotate end  | `onSpatialRotateEnd`  | `ModelSpatialRotateEndEvent`  |
+| Magnify     | `onSpatialMagnify`    | `ModelSpatialMagnifyEvent`    |
+| Magnify end | `onSpatialMagnifyEnd` | `ModelSpatialMagnifyEndEvent` |
+
+Optional `spatialEventOptions={{ constrainedToAxis }}` constrains the rotate gesture to an axis — see [Spatial Rotate](../event-api/spatial-rotate.md#spatialeventoptions). These handlers are ignored when [`stagemode`](#stagemode) is `"orbit"`, and they are stripped when `<Model>` falls back to the standard `<model>` element.
+
 ## JavaScript API
 
 Access the following JavaScript APIs through a React ref to the underlying `<Model>` element.
@@ -156,6 +181,14 @@ If the source file cannot be fetched, or the file cannot be parsed as a valid 3D
 A readable and writable `DOMMatrixReadOnly` representing the [relationship between the 3D model and the internal space of the 3D content container](https://github.com/immersive-web/model-element/blob/main/explainer.md#visual-presentation-control).
 
 By default, the 3D model fills as much of `<Model>`'s width or height as possible while preserving its original proportions, so you can control the size of the 3D model by controlling the size of the 2D plane corresponding to `<Model>`.
+
+`boundingBoxCenter`
+
+A read-only `DOMPointReadOnly` holding the center of the model's axis-aligned bounding box in the container's local space.
+
+`boundingBoxExtents`
+
+A read-only `DOMPointReadOnly` holding the extents (full size along each axis) of the model's bounding box in the container's local space.
 
 ### Animation Playback API
 

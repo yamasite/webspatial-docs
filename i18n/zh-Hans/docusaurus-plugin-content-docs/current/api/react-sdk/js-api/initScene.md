@@ -14,17 +14,20 @@ description: '在新空间场景打开前，为它配置初始化属性。'
 ```js
 import { initScene } from "@webspatial/react-sdk";
 
-initScene("newSceneName", defaultConfig => {
-  return {
-    ...defaultConfig,
-    type: "volume",
-    defaultSize: {
-      width: "1m",
-      height: "100px",
-      depth: "100px",
-    },
-  };
-});
+initScene(
+  "newSceneName",
+  defaultConfig => {
+    return {
+      ...defaultConfig,
+      defaultSize: {
+        width: "1m",
+        height: "100px",
+        depth: "100px",
+      },
+    };
+  },
+  { type: "volume" },
+);
 window.open(newSceneUrl, "newSceneName");
 ```
 
@@ -43,6 +46,17 @@ window.open(newSceneUrl, "newSceneName");
 一个回调函数，参数（`defaultConfig`）是这个 name 对应的自定义初始化属性的最新状态，并返回新的自定义初始化属性。
 
 如果是第一次对这个 name 执行 `initScene`，参数（`defaultConfig`）是默认的初始化属性。
+
+### options
+
+可选的第三个参数：
+
+```ts
+options?: { type: "window" | "volume" };
+```
+
+- `options.type` 选择用哪种[空间场景](../../../concepts/spatial-scenes.md)的内置默认值作为 `defaultConfig` 的种子，并按该场景类型的 schema 校验返回值，默认为 `"window"`。
+- 当初始化的是 volume 场景时传入 `{ type: "volume" }`，以便应用 volume 的默认值与校验。场景类型取自这个 `options.type`，而不是回调返回值里的 `type` 字段。
 
 ## 返回结构 {#return-shape}
 

@@ -9,16 +9,16 @@ One of the [initialization properties](../../../concepts/spatial-scenes.md#scene
 
 ## Availability
 
-| Item | Value |
-| --- | --- |
-| Applies to | Only `volume` Spatial Scenes. |
-| New scenes | Set through [`initScene`](../js-api/initScene.md). |
-| Start scene | Set through the [Web App Manifest](../manifest-options/main-scene.md). |
-| Default value | `"automatic"` |
+| Item          | Value                                                                  |
+| ------------- | ---------------------------------------------------------------------- |
+| Applies to    | Only `volume` Spatial Scenes.                                          |
+| New scenes    | Set through [`initScene`](../js-api/initScene.md).                     |
+| Start scene   | Set through the [Web App Manifest](../manifest-options/main-scene.md). |
+| Default value | `"automatic"`                                                          |
 
 ## Type Signature
 
-`"automatic" | "hidden"`
+`"automatic" | "visible" | "hidden"`
 
 ## Examples
 
@@ -41,12 +41,11 @@ window.open(newSceneUrl, "newSceneName");
 
 ### Using the Web App Manifest
 
-> [!CAUTION]
-> **Manifest key naming**
+> [!CAUTION] > **Manifest key naming**
 >
-> In a Web App Manifest, convert camelCase keys such as `baseplateVisibility` to lowercase snake_case such as `baseplate_visibility`.
+> In the build-time `xr_main_scene` key, write the option in camelCase — `baseplateVisibility` — exactly as shown below. WebSpatial Builder ignores the snake_case spelling `baseplate_visibility` inside `xr_main_scene`. The separate runtime `xr_spatial_scene` key accepts both spellings; see [main-scene](../manifest-options/main-scene.md#runtime-key-xr_spatial_scene).
 
-**Set baseplate_visibility for the start scene**
+**Set baseplateVisibility for the start scene**
 
 ```json
 {
@@ -54,7 +53,7 @@ window.open(newSceneUrl, "newSceneName");
   "start_url": "/",
   "xr_main_scene": {
     "type": "volume",
-    "baseplate_visibility": "hidden"
+    "baseplateVisibility": "hidden"
   }
 }
 ```
@@ -65,7 +64,8 @@ window.open(newSceneUrl, "newSceneName");
 
 ## Accepted Values
 
-| Value | Meaning |
-| --- | --- |
-| `"automatic"` | The baseplate is shown when needed. |
-| `"hidden"` | The baseplate is always hidden. |
+| Value         | Meaning                                         |
+| ------------- | ----------------------------------------------- |
+| `"automatic"` | The baseplate is shown when needed.             |
+| `"visible"`   | The baseplate is always shown under the volume. |
+| `"hidden"`    | The baseplate is always hidden.                 |

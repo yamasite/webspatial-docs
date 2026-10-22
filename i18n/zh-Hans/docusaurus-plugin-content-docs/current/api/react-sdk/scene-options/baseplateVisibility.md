@@ -5,7 +5,7 @@ description: '控制 volume 类型空间场景底板是否可见。'
 
 # `baseplateVisibility`
 
-[空间场景](../../../concepts/spatial-scenes.md)的[初始化属性](../../../concepts/spatial-scenes.md#scene-initialization)之一。只有 `volume` 类型的空间场景才支持设置 `baseplateVisibility`，它会影响 Volume 下方底板的可见性。
+[空间场景](../../../concepts/spatial-scenes.md)的[初始化属性](../../../concepts/spatial-scenes.md#scene-initialization)之一，控制 volume 场景下方底板是否显示。
 
 ## 适用范围与设置方式 {#declared-in}
 

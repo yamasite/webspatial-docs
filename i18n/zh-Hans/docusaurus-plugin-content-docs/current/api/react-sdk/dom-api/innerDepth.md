@@ -39,7 +39,7 @@ const currentVolumeDepth = window.xrInnerDepth;
 
 ### 概述 {#xrouterdepth-summary}
 
-`xrOuterDepth` 是与 `xrInnerDepth` 同组的配套 window 级深度读取属性。
+与 `xrInnerDepth` 同处 `window` 对象的配套读取属性。
 
 ### 可用对象 {#xrouterdepth-exposed-on}
 

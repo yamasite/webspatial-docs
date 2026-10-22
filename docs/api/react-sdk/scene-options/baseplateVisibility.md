@@ -5,7 +5,7 @@ description: 'Show or hide the baseplate under a volume Spatial Scene.'
 
 # `baseplateVisibility`
 
-One of the [initialization properties](../../../concepts/spatial-scenes.md#scene-initialization) of a [Spatial Scene](../../../concepts/spatial-scenes.md). Only Spatial Scenes of type `volume` support `baseplateVisibility`, and it affects the visibility of the baseplate under the Volume.
+One of the [initialization properties](../../../concepts/spatial-scenes.md#scene-initialization) of a [Spatial Scene](../../../concepts/spatial-scenes.md); it controls whether the baseplate under a volume scene is shown.
 
 ## Availability {#declared-in}
 

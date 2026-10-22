@@ -43,7 +43,7 @@ window.open(newSceneUrl, "newSceneName");
 
 ### configure
 
-一个回调函数，参数（`defaultConfig`）是这个 name 对应的自定义初始化属性的最新状态，并返回新的自定义初始化属性。
+一个回调，接收该 name 最新的 `defaultConfig`，返回新的初始化属性。
 
 如果是第一次对这个 name 执行 `initScene`，参数（`defaultConfig`）是默认的初始化属性。
 

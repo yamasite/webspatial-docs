@@ -15,23 +15,10 @@ The current WebSpatial SDK only supports `background-material` on the HTML eleme
 
 ## Mental Model
 
-When the value of `background-material` is `none`:
+The property behaves differently on the two targets:
 
-The webpage window keeps its default opaque fixed-color backplate.
-
-Spatialized HTML elements keep their default state with no backplate.
-
-When the value of `background-material` is `transparent`:
-
-For the webpage window, this removes the original opaque fixed-color backplate and makes it fully transparent with no border, so the elements inside the webpage appear to float separately in space.
-
-For spatialized HTML elements, this is equivalent to keeping the default no-backplate state.
-
-When the value of `background-material` is a translucent material such as `translucent`:
-
-For the webpage window, this replaces the original opaque fixed-color backplate with a translucent material backplate rendered dynamically in real time according to the viewpoint and environment.
-
-For spatialized HTML elements, this adds such a translucent material backplate.
+- On the webpage window, `none` keeps the native opaque backplate; `transparent` removes it entirely so inner elements appear to float; a translucent value replaces it with a material rendered live from the viewpoint and environment.
+- On spatialized HTML elements, `none` and `transparent` both mean "no backplate"; a translucent value adds one.
 
 ## Syntax
 

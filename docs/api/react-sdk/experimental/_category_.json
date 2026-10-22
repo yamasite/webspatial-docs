@@ -2,7 +2,7 @@
   "label": "Experimental",
   "position": 8,
   "collapsed": true,
-  "description": "Opt-in, pre-release APIs published from @webspatial/react-sdk/experimental: Ornament, WebSpatialInspector, and experimental motion hooks.",
+  "description": "Opt-in, pre-release APIs published from @webspatial/react-sdk/experimental: Ornament, WebSpatialInspector, and motion hooks.",
   "link": {
     "type": "doc",
     "id": "index"

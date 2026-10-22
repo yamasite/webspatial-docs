@@ -5,8 +5,7 @@ description: '控制空间场景是保持视觉大小恒定，还是随距离产
 
 # `worldScaling`
 
-[空间场景](../../../concepts/spatial-scenes.md)的[初始化属性](../../../concepts/spatial-scenes.md#scene-initialization)之一，`worldScaling` 会影响空间场景创建后被用户拖拽在水平方向上移动时的行为。
-只有 `volume` 类型的空间场景才支持 `worldScaling`。
+[空间场景](../../../concepts/spatial-scenes.md)的[初始化属性](../../../concepts/spatial-scenes.md#scene-initialization)之一，控制场景创建后被用户水平拖拽时的行为。
 
 ## 适用范围与设置方式 {#declared-in}
 

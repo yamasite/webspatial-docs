@@ -5,8 +5,7 @@ description: 'Control whether a Spatial Scene keeps a constant apparent size or 
 
 # `worldScaling`
 
-One of the [initialization properties](../../../concepts/spatial-scenes.md#scene-initialization) of a [Spatial Scene](../../../concepts/spatial-scenes.md), `worldScaling` affects how a Spatial Scene behaves when the user drags it horizontally after creation.
-Only Spatial Scenes of type `volume` support `worldScaling`.
+One of the [initialization properties](../../../concepts/spatial-scenes.md#scene-initialization) of a [Spatial Scene](../../../concepts/spatial-scenes.md); it controls how a scene responds when the user drags it horizontally after creation.
 
 ## Availability {#declared-in}
 

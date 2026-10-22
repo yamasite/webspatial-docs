@@ -76,9 +76,9 @@ WebSpatial API 在 Web App Manifest 标准中扩展出的新属性，在标准�
 
 ## 运行时键：`xr_spatial_scene` {#runtime-key-xr_spatial_scene}
 
-上面的 `xr_main_scene` 是 WebSpatial Builder 在打包时读取的构建期键。除此之外，WebSpatial 运行时 polyfill 还会读取另一个独立的 Manifest 键 `xr_spatial_scene`，用于在浏览器中应用起始场景的默认值。这两个键不能互换：Builder 会忽略 `xr_spatial_scene`，运行时 polyfill 会忽略 `xr_main_scene`。
+这两个键不能互换：Builder 会忽略 `xr_spatial_scene`，运行时 polyfill 会忽略 `xr_main_scene`。
 
-`xr_spatial_scene` 接受相同的场景属性，但在同一个对象内同时接受 camelCase 和 snake_case 两种写法；当同一个对象里两种写法同时存在时，以 snake_case 为准。它还支持按场景类型设置 `overrides`：
+`xr_spatial_scene` 接受相同的场景属性；在同一个对象内，snake_case 优先于 camelCase。它还支持按场景类型设置 `overrides`：
 
 ```ts
 {
@@ -102,4 +102,4 @@ WebSpatial API 在 Web App Manifest 标准中扩展出的新属性，在标准�
 }
 ```
 
-`overrides.window_scene` 与 `overrides.volume_scene` 会在顶层默认值之上做深度合并，并对对应场景类型优先生效。snake_case 只在同一对象内部胜出，不会覆盖另一层上的值。
+`overrides.window_scene` 与 `overrides.volume_scene` 会在顶层默认值之上深度合并，并对对应场景类型优先生效；snake_case 优先规则只在同一对象层内生效，不跨层覆盖。

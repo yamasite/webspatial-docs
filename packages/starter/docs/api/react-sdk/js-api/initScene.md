@@ -43,7 +43,7 @@ If `initScene` is called multiple times for the same `name`, the custom initiali
 
 ### configure
 
-A callback function. Its parameter, `defaultConfig`, is the latest state of the custom initialization properties for that `name`, and the callback returns the new custom initialization properties.
+A callback that receives the latest `defaultConfig` for that `name` and returns the new initialization properties.
 
 If this is the first time `initScene` is called for that `name`, the parameter `defaultConfig` contains the default initialization properties.
 

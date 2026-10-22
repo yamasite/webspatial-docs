@@ -13,7 +13,7 @@ description: 'Install console helpers to inspect the live spatial scene and spat
 import { enableDebugTool } from "@webspatial/react-sdk";
 ```
 
-Call it after the spatial runtime has finished booting. On the server (`window` undefined) the call is a no-op.
+On the server (`window` undefined) the call is a no-op.
 
 ## Prerequisites
 

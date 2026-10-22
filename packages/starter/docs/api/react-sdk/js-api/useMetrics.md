@@ -9,11 +9,7 @@ description: 'Convert between 2D pixel units and real-world meter units inside W
 
 Performs [unit conversion](../../../concepts/3d-content-containers.md#2d-containing-3d) between the point unit (`px`) used by 2D GUI and the physical world unit (`m`) used by 3D space.
 
-On visionOS, the default mapping is roughly `1360px ≈ 1 meter`, but this conversion is not always fixed:
-
-If the [Spatial Scene container](../../../concepts/spatial-scenes.md) is of type `window`, or if the scene type is `volume` and [`worldScaling` in the initialization properties is set to `dynamic`](../scene-options/worldScaling.md), then the conversion between these two units is not fixed. See [`worldScalingCompensation`](#return-shape).
-
-The conversion ratio also differs across spatial computing platforms, so this API should be used consistently for unit conversion.
+On visionOS, the default mapping is roughly `1360px ≈ 1 meter`, but it is not fixed: it shifts for `window` scenes and for `volume` scenes whose [`worldScaling`](../scene-options/worldScaling.md) is `dynamic` — see [`worldScalingCompensation`](#return-shape). The ratio also differs across spatial computing platforms, so convert with this API rather than hard-coding pixels.
 
 > [!CAUTION] > **Only works in a WebSpatial environment**
 >

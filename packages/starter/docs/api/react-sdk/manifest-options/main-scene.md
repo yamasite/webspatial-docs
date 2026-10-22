@@ -76,9 +76,9 @@ Example:
 
 ## Runtime key: `xr_spatial_scene`
 
-`xr_main_scene` above is the build-time key consumed by WebSpatial Builder during packaging. Independently, the WebSpatial runtime polyfill reads a separate manifest key, `xr_spatial_scene`, to apply Start Scene defaults in the browser. The two keys are not interchangeable: Builder ignores `xr_spatial_scene`, and the runtime polyfill ignores `xr_main_scene`.
+The two keys are not interchangeable: Builder ignores `xr_spatial_scene`, and the runtime polyfill ignores `xr_main_scene`.
 
-`xr_spatial_scene` accepts the same scene options, but within a single object it accepts both camelCase and snake_case spellings; when both are present on the same object, the snake_case value wins. It also supports per-scene-type `overrides`:
+`xr_spatial_scene` accepts the same scene options; within one object, snake_case wins over camelCase. It also supports per-scene-type `overrides`:
 
 ```ts
 {
@@ -102,4 +102,4 @@ Example:
 }
 ```
 
-The `overrides.window_scene` and `overrides.volume_scene` objects are deep-merged on top of the top-level defaults and take precedence for that scene type. Snake_case wins only within the same object; it does not override values on another layer.
+The `overrides.window_scene` and `overrides.volume_scene` objects deep-merge on top of the top-level defaults and take precedence for that scene type; the snake_case-wins rule applies only within one object, not across layers.

@@ -2,7 +2,7 @@
   "label": "实验性",
   "position": 8,
   "collapsed": true,
-  "description": "来自 @webspatial/react-sdk/experimental 的可选预发布 API：Ornament、WebSpatialInspector 和实验性运动 Hook。",
+  "description": "来自 @webspatial/react-sdk/experimental 的可选预发布 API：Ornament、WebSpatialInspector 和运动 Hook。",
   "link": {
     "type": "doc",
     "id": "index"

@@ -13,7 +13,7 @@ description: '安装控制台辅助工具，在开发期间检视运行中的空
 import { enableDebugTool } from "@webspatial/react-sdk";
 ```
 
-请在空间运行时完成启动之后调用它。在服务器端（`window` 未定义）该调用为空操作。
+在服务器端（`window` 未定义）该调用为空操作。
 
 ## 前置条件 {#prerequisites}
 

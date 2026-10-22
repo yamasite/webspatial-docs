@@ -140,11 +140,11 @@ The [MIME media type](https://www.iana.org/assignments/media-types/media-types.x
 
 ### `onLoad` {#onload}
 
-Triggered when the 3D model has loaded successfully and is ready for display and interaction. If multiple sources are provided, this event fires only for the first source that loads successfully.
+Triggered when the 3D model has loaded successfully and is ready for display and interaction.
 
 ### `onError` {#onerror}
 
-Triggered when the model fails to load. If multiple sources are provided, this event fires only after all sources have been attempted and have failed; it does not fire for each individual source failure.
+Triggered when the model fails to load after every `<source>` has been attempted.
 
 ## Gesture Events
 

@@ -5,8 +5,7 @@ description: 'Control whether a Spatial Scene stays upright, faces the user, or 
 
 # `worldAlignment`
 
-One of the [initialization properties](../../../concepts/spatial-scenes.md#scene-initialization) of a [Spatial Scene](../../../concepts/spatial-scenes.md), `worldAlignment` affects how a Spatial Scene behaves when the user drags it vertically after creation.
-Only Spatial Scenes of type `volume` support `worldAlignment`.
+One of the [initialization properties](../../../concepts/spatial-scenes.md#scene-initialization) of a [Spatial Scene](../../../concepts/spatial-scenes.md); it controls how a scene responds when the user drags it vertically after creation.
 
 ## Availability {#declared-in}
 

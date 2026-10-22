@@ -141,11 +141,11 @@ stagemode?: "orbit" | "none";
 
 ### `onLoad` {#onload}
 
-当 3D 模型成功加载，并且已经可用于显示和交互时触发。如果提供了多个 source，这个事件只会针对第一个成功加载的 source 触发。
+当 3D 模型成功加载，并且已经可用于显示和交互时触发。
 
 ### `onError` {#onerror}
 
-当模型加载失败时触发。如果提供了多个 source，这个事件只会在所有 source 都已尝试且全部失败后触发，不会针对每一次单独的 source 加载失败触发。
+当所有 `<source>` 都尝试失败后触发。
 
 ## 手势事件 {#gesture-events}
 

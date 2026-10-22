@@ -39,7 +39,7 @@ const currentVolumeDepth = window.xrInnerDepth;
 
 ### Summary
 
-`xrOuterDepth` is the companion window-level depth readback in the same DOM depth group as `xrInnerDepth`.
+Companion to `xrInnerDepth` on the same `window` object.
 
 ### Exposed On
 
